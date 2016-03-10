@@ -1,0 +1,78 @@
+context:
+  dataset: ~
+  efficiency_file: ~
+  xsections_file: ~
+  modelName: ~
+stages:
+  - name: download
+    parameters:
+      dataset: '{dataset}'
+      outDir: '/workdir/grid_download'
+      outList: '/workdir/files.list'
+    scheduler:
+      scheduler-type: 'singlestep-from-context'
+      steps:
+        single: {$ref: 'common_steps/downloadnode.yml'} 
+  - name: ntupling
+    dependencies:
+      - download
+    parameters:
+      minintup: '/workdir/mini.root'
+      maxsyst: 1
+      input_type: '-mc'
+      filter: '-nomllalpgenfilter'
+      blinded: '-unblind'
+      include_truth: '-truth'
+    scheduler:
+      scheduler-type: 'reduce-from-dep-output'
+      steps:
+        reduce: {$ref: 'ewksusy_steps/ntupling.yml'}
+      from_stages:
+        - download
+      take_outputs: output
+      to_input: filelist
+  - name: histfitprepare
+    dependencies:
+      - ntupling
+    parameters:
+      efficiency_file: '{efficiency_file}'
+      xsections_file: '{xsections_file}'
+      modelName: '{modelName}'
+      histfittree_file: '/workdir/out.root'
+      yield_file: '/workdir/out.yield'
+    scheduler:
+      scheduler-type: 'reduce-from-dep-output'
+      steps:
+        reduce: {$ref: 'ewk_analyses/ewkdilepton_analysis/histfitprep.yml'}
+      from_stages:
+        - ntupling
+      take_outputs: output
+      to_input: miniroot
+  - name: fit
+    dependencies:
+      - histfitprepare
+    parameters:
+      fitresults: '/workdir/fit.tgz'
+    scheduler:
+      scheduler-type: 'reduce-from-dep-output'
+      steps:
+        reduce: {$ref: 'ewk_analyses/ewkdilepton_analysis/fit.yml'}
+      from_stages:
+        - histfitprepare
+      take_outputs: output_tree
+      to_input: histfitroot
+  - name: postproc
+    dependencies:
+      - fit
+    parameters:
+      workdir: '/workdir/postproc'
+      modelName: '{modelName}'
+      resultsyaml: '/workdir/results.yaml'
+    scheduler:
+      scheduler-type: 'reduce-from-dep-output'
+      steps:
+        reduce: {$ref: 'ewk_analyses/ewkdilepton_analysis/postproc.yml'}
+      from_stages:
+        - fit
+      take_outputs: output
+      to_input: fitresultsarchive

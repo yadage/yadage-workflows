@@ -1,0 +1,10 @@
+process:
+  process-type: 'string-interpolated-cmd'
+  cmd: './ntupling.sh {inputtype} {input} {output}'
+publisher:
+  publisher-type: 'process-attr-pub'
+  outputmap:
+    ntuple: output
+environment:
+  environment-type: 'docker-encapsulated'
+  image: lukasheinrich/workflow-dummy

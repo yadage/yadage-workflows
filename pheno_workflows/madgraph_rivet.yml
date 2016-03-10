@@ -1,0 +1,69 @@
+context:
+  events: ~
+  rivet_analysis: ~
+stages:
+  - name: prepare
+    parameters:
+      model: sm
+      parametercard: '/workdir/param.dat'
+      inputpars: defaultparam.yml
+    scheduler:
+      scheduler-type: 'singlestep-from-context'
+      steps:
+        single: {$ref: 'pheno_workflows/preparestep.yml'}
+  - name: madgraph
+    dependencies:
+      - prepare
+    parameters:
+      outputlhe: '/workdir/output.lhe'
+      events: '{events}'
+    scheduler:
+      scheduler-type: 'reduce-from-dep-output'
+      steps:
+        reduce: {$ref: 'pheno_workflows/madgraph.yml'}
+      from_stages:
+        - prepare
+      take_outputs: parcard
+      to_input: paramcard
+  - name: pythia
+    dependencies:
+      - madgraph
+    parameters:
+      outputhepmc: '/workdir/output.hepmc'
+      events: '{events}'
+    scheduler:
+      scheduler-type: 'reduce-from-dep-output'
+      steps:
+        reduce: {$ref: 'pheno_workflows/pythia.yml'}
+      from_stages:
+        - madgraph
+      take_outputs: lhefile
+      to_input: lhefile
+  - name: rivet
+    dependencies:
+      - pythia
+    parameters:
+      outputyoda: '/workdir/output.yoda'
+      analysis: '{rivet_analysis}'
+    scheduler:
+      scheduler-type: 'reduce-from-dep-output'
+      steps:
+        reduce: {$ref: 'pheno_workflows/rivet.yml'}
+      from_stages:
+        - pythia
+      take_outputs: hepmcfile
+      to_input: inputhepmc
+  - name: plots
+    dependencies:
+      - rivet
+    parameters:
+      yodaplots: '/workdir/plots'
+    scheduler:
+      scheduler-type: 'reduce-from-dep-output'
+      steps:
+        reduce: {$ref: 'pheno_workflows/rivetplot.yml'}
+      from_stages:
+        - rivet
+      take_outputs: yodafile
+      to_input: inputyoda
+

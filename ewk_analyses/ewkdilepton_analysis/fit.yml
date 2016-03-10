@@ -1,0 +1,13 @@
+process:
+  process-type: 'string-interpolated-cmd'
+  cmd: './luke_run_limit.sh {histfitroot} {fitresults}'
+publisher:
+  publisher-type: 'process-attr-pub'
+  outputmap:
+    output: fitresults
+environment:
+  environment-type: 'docker-encapsulated'
+  envscript: /resources/fitenv.sh
+  image: lukasheinrich/dilepton_fit
+  resources:
+    - CVMFS

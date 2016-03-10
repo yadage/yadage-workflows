@@ -1,0 +1,9 @@
+process:
+  process-type: 'string-interpolated-cmd'
+  cmd: 'echo $RANDOM|sed "s|[0-9]|&.|" | xargs sleep && echo {parameter_one} && echo "acq_out: [hey,there,foo]" > /workdir/outputfile.yml'
+publisher:
+  publisher-type: 'fromyaml-pub'
+  yamlfile: '/workdir/outputfile.yml'
+environment:
+  environment-type: 'docker-encapsulated'
+  image: busybox

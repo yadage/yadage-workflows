@@ -1,0 +1,10 @@
+process:
+  process-type: 'string-interpolated-cmd'
+  cmd: './getsignal.sh {par_one} {par_two} {output}'
+publisher:
+  publisher-type: 'process-attr-pub'
+  outputmap:
+    signal_sample: output
+environment:
+  environment-type: 'docker-encapsulated'
+  image: lukasheinrich/workflow-dummy

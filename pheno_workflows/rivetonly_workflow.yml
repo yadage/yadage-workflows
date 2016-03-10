@@ -1,0 +1,14 @@
+context:
+  hepmcfile: ~
+  rivet_analysis: ~
+stages:
+  - name: rivet
+    dependencies: []
+    parameters:
+      inputhepmc: '{hepmcfile}'
+      outputyoda: '/workdir/output.yoda'
+      analysis: '{rivet_analysis}'
+    scheduler:
+      scheduler-type: 'singlestep-from-context'
+      steps:
+        single: {$ref: 'pheno_workflows/rivet.yml'}

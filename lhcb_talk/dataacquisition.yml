@@ -1,0 +1,9 @@
+process:
+  process-type: 'string-interpolated-cmd'
+  cmd: 'echo "acq_out: {inputs}" > /workdir/outputfile.yml'
+publisher:
+  publisher-type: 'fromyaml-pub'
+  yamlfile: '/workdir/outputfile.yml'
+environment:
+  environment-type: 'docker-encapsulated'
+  image: busybox

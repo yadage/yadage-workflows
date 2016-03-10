@@ -1,0 +1,22 @@
+context:
+  inputparameter: ~
+  outputparameter: ~
+stages:
+  - name: dummystage
+    parameters:
+      input: '{inputparameter}'
+      output: '{outputparameter}'
+    scheduler:
+      scheduler-type: 'singlestep-from-context'
+      steps:
+        single:
+          process:
+            process-type: 'string-interpolated-cmd'
+            cmd: 'echo {input} {output}'
+          publisher:
+            publisher-type: 'process-attr-pub'
+            outputmap:
+              step_output: output
+          environment:
+            environment-type: 'docker-encapsulated'
+            image: busybox

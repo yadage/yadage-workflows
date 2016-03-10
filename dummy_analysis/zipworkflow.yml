@@ -1,0 +1,26 @@
+context:
+  dummyvalue: ~
+stages:
+  - name: init
+    parameters:
+      parameter_one: '{dummyvalue}'
+    scheduler:
+      scheduler-type: 'singlestep-from-context'
+      steps:
+        single: {$ref: 'dummy_analysis/dummystep.yml'}
+  - name: zip
+    dependencies:
+      - init
+    parameters: {}
+    scheduler:
+      scheduler-type: 'zip-from-dep-output'
+      from_stages:
+        - init
+      zip:
+        - outputs: 'multiple'
+          zip_with: ['par1','par2','par3']
+        - outputs: 'single'
+          zip_with: ['par4']
+      steps:
+        single: {$ref: 'dummy_analysis/take_four_pars.yml'}
+        

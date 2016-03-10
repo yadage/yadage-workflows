@@ -1,0 +1,11 @@
+process:
+  process-type: 'string-interpolated-cmd'
+  cmd: 'echo no pars...'
+publisher:
+  publisher-type: 'dummy-pub'
+  publish:
+    multiple: ['one','two','three']
+    single: ['single_one']
+environment:
+  environment-type: 'docker-encapsulated'
+  image: busybox
