@@ -1,0 +1,10 @@
+process:
+  process-type: 'string-interpolated-cmd'
+  cmd: './globexample.sh {par1} {par2}'
+publisher:
+  publisher-type: 'fromglob-pub'
+  outputkey: rootfiles
+  globexpression: '*.pool.root'
+environment:
+  environment-type: 'docker-encapsulated'
+  image: lukasheinrich/walkthrough_one
