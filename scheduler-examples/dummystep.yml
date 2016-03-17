@@ -1,10 +1,11 @@
 process:
   process_type: 'string-interpolated-cmd'
-  cmd: 'echo {input} {output}'
+  cmd: 'echo {one} {two}'
 publisher:
-  publisher_type: 'frompar-pub'
-  outputmap:
-    mapoutput: output
+  publisher_type: 'constant-pub'
+  publish:
+    multiple: ['one','two','three']
+    single: ['single_val']
 environment:
   environment_type: 'docker-encapsulated'
   image: busybox

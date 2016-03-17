@@ -1,10 +1,10 @@
 process:
-  process-type: 'string-interpolated-cmd'
+  process_type: 'string-interpolated-cmd'
   cmd: 'rivet-mkhtml -o {yodaplots} {inputyoda}'
 publisher:
-  publisher-type: 'process-attr-pub'
+  publisher_type: 'frompar-pub'
   outputmap:
     plots: yodaplots
 environment:
-  environment-type: 'docker-encapsulated'
+  environment_type: 'docker-encapsulated'
   image: lukasheinrich/rivet-with-tex

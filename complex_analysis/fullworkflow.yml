@@ -12,36 +12,32 @@ stages:
       input: '{dataset_data}'
       output: '{dataset_data}.ntup.root'
     scheduler:
-      scheduler-type: 'singlestep-from-context'
-      steps:
-        single: {$ref: 'complex_analysis/ntupling.yml'}
+      scheduler_type: 'single-from-ctx'
+      step: {$ref: 'complex_analysis/ntupling.yml'}
   - name: mcback1
     parameters:
       inputtype: 'mc'
       input: '{dataset_mcback_one}'
       output: '/workdir/{dataset_mcback_one}.ntup.root'
     scheduler:
-      scheduler-type: 'singlestep-from-context'
-      steps:
-        single: {$ref: 'complex_analysis/ntupling.yml'}
+      scheduler_type: 'single-from-ctx'
+      step: {$ref: 'complex_analysis/ntupling.yml'}
   - name: mcback2
     parameters:
       inputtype: 'mc'
       input: '{dataset_mcback_one}'
       output: '/workdir/{dataset_mcback_one}.ntup.root'
     scheduler:
-      scheduler-type: 'singlestep-from-context'
-      steps:
-        single: {$ref: 'complex_analysis/ntupling.yml'}
+      scheduler_type: 'single-from-ctx'
+      step: {$ref: 'complex_analysis/ntupling.yml'}
   - name: acquire_signal
     parameters:
       par_one: '{signal_par_one}'
       par_two: '{signal_par_two}'
       output: '/workdir/signal.input.root'
     scheduler:
-      scheduler-type: 'singlestep-from-context'
-      steps:
-        single: {$ref: 'complex_analysis/getsignal.yml'}
+      scheduler_type: 'single-from-ctx'
+      step: {$ref: 'complex_analysis/getsignal.yml'}
   - name: mcsignal
     dependencies:
       - acquire_signal
@@ -49,12 +45,11 @@ stages:
       inputtype: 'mc'
       output: '/workdir/signal.ntup.root'
     scheduler:
-      scheduler-type: 'reduce-from-dep-output'
-      steps:
-        reduce: {$ref: 'complex_analysis/ntupling.yml'}
+      scheduler_type: 'reduce-from-dep'
+      step: {$ref: 'complex_analysis/ntupling.yml'}
       from_stages:
         - acquire_signal
-      take_outputs: signal_sample
+      outputs: signal_sample
       to_input: input
   - name: hist_mcsignal
     dependencies:
@@ -62,12 +57,11 @@ stages:
     parameters:
       output: '/workdir/signal.histos.root'
     scheduler:
-      scheduler-type: 'reduce-from-dep-output'
-      steps:
-        reduce: {$ref: 'complex_analysis/makehistos_mc.yml'}
+      scheduler_type: 'reduce-from-dep'
+      step: {$ref: 'complex_analysis/makehistos_mc.yml'}
       from_stages:
         - mcsignal
-      take_outputs: ntuple
+      outputs: ntuple
       to_input: input
   - name: hist_mc1
     dependencies:
@@ -75,12 +69,11 @@ stages:
     parameters:
       output: '/workdir/back1.histos.root'
     scheduler:
-      scheduler-type: 'reduce-from-dep-output'
-      steps:
-        reduce: {$ref: 'complex_analysis/makehistos_mc.yml'}
+      scheduler_type: 'reduce-from-dep'
+      step: {$ref: 'complex_analysis/makehistos_mc.yml'}
       from_stages:
         - mcback1
-      take_outputs: ntuple
+      outputs: ntuple
       to_input: input
   - name: hist_mc2
     dependencies:
@@ -88,12 +81,11 @@ stages:
     parameters:
       output: '/workdir/back2.histos.root'
     scheduler:
-      scheduler-type: 'reduce-from-dep-output'
-      steps:
-        reduce: {$ref: 'complex_analysis/makehistos_mc.yml'}
+      scheduler_type: 'reduce-from-dep'
+      step: {$ref: 'complex_analysis/makehistos_mc.yml'}
       from_stages:
         - mcback2
-      take_outputs: ntuple
+      outputs: ntuple
       to_input: input
   - name: hist_data
     dependencies:
@@ -101,12 +93,11 @@ stages:
     parameters:
       output: '/workdir/data.histos.root'
     scheduler:
-      scheduler-type: 'reduce-from-dep-output'
-      steps:
-        reduce: {$ref: 'complex_analysis/makehistos_data.yml'}
+      scheduler_type: 'reduce-from-dep'
+      step: {$ref: 'complex_analysis/makehistos_data.yml'}
       from_stages:
         - preparedata
-      take_outputs: ntuple
+      outputs: ntuple
       to_input: input
   - name: data_driven_back_hists
     dependencies:
@@ -116,12 +107,11 @@ stages:
       output_tight: '/workdir/data.histos.root:/tight_hist'
       tight_cut: '{data_driven_cut}'
     scheduler:
-      scheduler-type: 'reduce-from-dep-output'
-      steps:
-        reduce: {$ref: 'complex_analysis/makehistos_datadrivenback.yml'}
+      scheduler_type: 'reduce-from-dep'
+      step: {$ref: 'complex_analysis/makehistos_datadrivenback.yml'}
       from_stages:
         - preparedata
-      take_outputs: ntuple
+      outputs: ntuple
       to_input: input
   - name: hist_estimate
     dependencies:
@@ -129,9 +119,8 @@ stages:
     parameters:
       estimate_output: '/workdir/estimate.hist.root'
     scheduler:
-      scheduler-type: 'zip-from-dep-output'
-      steps:
-        single: {$ref: 'complex_analysis/estimate_back.yml'}
+      scheduler_type: 'zip-from-dep'
+      step: {$ref: 'complex_analysis/estimate_back.yml'}
       zip:
         - outputs: 'tight'
           zip_with: ['tighthisto']
@@ -152,9 +141,8 @@ stages:
       fitresults: /workdir/fitresults.yaml
       workspace: /workdir/fit.workspace.root
     scheduler:
-      scheduler-type: 'zip-from-dep-output'
-      steps:
-        single: {$ref: 'complex_analysis/runfit.yml'}
+      scheduler_type: 'zip-from-dep'
+      step: {$ref: 'complex_analysis/runfit.yml'}
       zip:
         - outputs: 'estimate|mchistos'
           zip_with: ['back1','back2','back3']
@@ -180,9 +168,8 @@ stages:
     parameters:
       plotdir: /workdir/plots
     scheduler:
-      scheduler-type: 'zip-from-dep-output'
-      steps:
-        single: {$ref: 'complex_analysis/makeplots.yml'}
+      scheduler_type: 'zip-from-dep'
+      step: {$ref: 'complex_analysis/makeplots.yml'}
       zip:
         - outputs: 'estimate|mchistos'
           zip_with: ['back1','back2','back3']

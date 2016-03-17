@@ -10,9 +10,8 @@ stages:
       outDir: '/workdir/grid_download'
       outList: '/workdir/files.list'
     scheduler:
-      scheduler-type: 'singlestep-from-context'
-      steps:
-        single: {$ref: 'common_steps/downloadnode.yml'} 
+      scheduler_type: 'single-from-ctx'
+      step: {$ref: 'common_steps/downloadnode.yml'} 
   - name: ntupling
     dependencies:
       - download
@@ -24,12 +23,11 @@ stages:
       blinded: '-unblind'
       include_truth: '-truth'
     scheduler:
-      scheduler-type: 'reduce-from-dep-output'
-      steps:
-        reduce: {$ref: 'ewksusy_steps/ntupling.yml'}
+      scheduler_type: 'reduce-from-dep'
+      step: {$ref: 'ewksusy_steps/ntupling.yml'}
       from_stages:
         - download
-      take_outputs: output
+      outputs: output
       to_input: filelist
   - name: histfitprepare
     dependencies:
@@ -41,12 +39,11 @@ stages:
       histfittree_file: '/workdir/out.root'
       yield_file: '/workdir/out.yield'
     scheduler:
-      scheduler-type: 'reduce-from-dep-output'
-      steps:
-        reduce: {$ref: 'ewk_analyses/ewkdilepton_analysis/histfitprep.yml'}
+      scheduler_type: 'reduce-from-dep'
+      step: {$ref: 'ewk_analyses/ewkdilepton_analysis/histfitprep.yml'}
       from_stages:
         - ntupling
-      take_outputs: output
+      outputs: output
       to_input: miniroot
   - name: fit
     dependencies:
@@ -54,12 +51,11 @@ stages:
     parameters:
       fitresults: '/workdir/fit.tgz'
     scheduler:
-      scheduler-type: 'reduce-from-dep-output'
-      steps:
-        reduce: {$ref: 'ewk_analyses/ewkdilepton_analysis/fit.yml'}
+      scheduler_type: 'reduce-from-dep'
+      step: {$ref: 'ewk_analyses/ewkdilepton_analysis/fit.yml'}
       from_stages:
         - histfitprepare
-      take_outputs: output_tree
+      outputs: output_tree
       to_input: histfitroot
   - name: postproc
     dependencies:
@@ -69,10 +65,9 @@ stages:
       modelName: '{modelName}'
       resultsyaml: '/workdir/results.yaml'
     scheduler:
-      scheduler-type: 'reduce-from-dep-output'
-      steps:
-        reduce: {$ref: 'ewk_analyses/ewkdilepton_analysis/postproc.yml'}
+      scheduler_type: 'reduce-from-dep'
+      step: {$ref: 'ewk_analyses/ewkdilepton_analysis/postproc.yml'}
       from_stages:
         - fit
-      take_outputs: output
+      outputs: output
       to_input: fitresultsarchive

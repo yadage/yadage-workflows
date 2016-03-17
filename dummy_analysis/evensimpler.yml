@@ -7,16 +7,15 @@ stages:
       input: '{inputparameter}'
       output: '{outputparameter}'
     scheduler:
-      scheduler-type: 'singlestep-from-context'
-      steps:
-        single:
-          process:
-            process-type: 'string-interpolated-cmd'
-            cmd: 'echo {input} {output}'
-          publisher:
-            publisher-type: 'process-attr-pub'
-            outputmap:
-              step_output: output
-          environment:
-            environment-type: 'docker-encapsulated'
-            image: busybox
+      scheduler_type: 'single-from-ctx'
+      step:
+        process:
+          process_type: 'string-interpolated-cmd'
+          cmd: 'echo {input} {output}'
+        publisher:
+          publisher_type: 'frompar-pub'
+          outputmap:
+            step_output: output
+        environment:
+          environment_type: 'docker-encapsulated'
+          image: busybox

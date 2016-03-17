@@ -7,9 +7,8 @@ stages:
       parametercard: '/workdir/param.dat'
       inputpars: defaultparam.yml
     scheduler:
-      scheduler-type: 'singlestep-from-context'
-      steps:
-        single: {$ref: 'pheno_workflows/preparestep.yml'}
+      scheduler_type: 'single-from-ctx'
+      step: {$ref: 'pheno_workflows/preparestep.yml'}
   - name: madgraph
     dependencies:
       - prepare
@@ -17,12 +16,11 @@ stages:
       outputlhe: '/workdir/output.lhe'
       events: '{events}'
     scheduler:
-      scheduler-type: 'reduce-from-dep-output'
-      steps:
-        reduce: {$ref: 'pheno_workflows/madgraph.yml'}
+      scheduler_type: 'reduce-from-dep'
+      step: {$ref: 'pheno_workflows/madgraph.yml'}
       from_stages:
         - prepare
-      take_outputs: parcard
+      outputs: parcard
       to_input: paramcard
   - name: pythia
     dependencies:
@@ -31,12 +29,11 @@ stages:
       outputhepmc: '/workdir/output.hepmc'
       events: '{events}'
     scheduler:
-      scheduler-type: 'reduce-from-dep-output'
-      steps:
-        reduce: {$ref: 'pheno_workflows/pythia.yml'}
+      scheduler_type: 'reduce-from-dep'
+      step: {$ref: 'pheno_workflows/pythia.yml'}
       from_stages:
         - madgraph
-      take_outputs: lhefile
+      outputs: lhefile
       to_input: lhefile
   - name: delphes
     dependencies:
@@ -46,10 +43,9 @@ stages:
       outputlhco: '/workdir/output.lhco'
       delphes_card: 'delphes/cards/delphes_card_ATLAS.tcl'
     scheduler:
-      scheduler-type: 'reduce-from-dep-output'
-      steps:
-        reduce: {$ref: 'pheno_workflows/delphes.yml'}
+      scheduler_type: 'reduce-from-dep'
+      step: {$ref: 'pheno_workflows/delphes.yml'}
       from_stages:
         - pythia
-      take_outputs: hepmcfile
+      outputs: hepmcfile
       to_input: inputhepmc

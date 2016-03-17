@@ -1,12 +1,12 @@
 process:
-  process-type: 'string-interpolated-cmd'
+  process_type: 'string-interpolated-cmd'
   cmd: './luke_run_limit.sh {histfitroot} {fitresults}'
 publisher:
-  publisher-type: 'process-attr-pub'
+  publisher_type: 'frompar-pub'
   outputmap:
     output: fitresults
 environment:
-  environment-type: 'docker-encapsulated'
+  environment_type: 'docker-encapsulated'
   envscript: /resources/fitenv.sh
   image: lukasheinrich/dilepton_fit
   resources:

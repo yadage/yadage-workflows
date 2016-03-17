@@ -1,10 +1,10 @@
 process:
-  process-type: 'string-interpolated-cmd'
+  process_type: 'string-interpolated-cmd'
   cmd: 'echo $RANDOM|sed "s|[0-9]|&.|" | xargs sleep && echo {inputpar} {parameter_out}'
 publisher:
-  publisher-type: 'process-attr-pub'
+  publisher_type: 'frompar-pub'
   outputmap:
     output: parameter_out
 environment:
-  environment-type: 'docker-encapsulated'
+  environment_type: 'docker-encapsulated'
   image: busybox

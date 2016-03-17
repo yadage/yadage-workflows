@@ -1,12 +1,12 @@
 process:
-  process-type: 'string-interpolated-cmd'
+  process_type: 'string-interpolated-cmd'
   cmd: './DileptonAnalysis {blinded} {include_truth} {filter} {input_type} -maxsyst {maxsyst} -m {minintup} -f {filelist}'
 publisher:
-  publisher-type: 'process-attr-pub'
+  publisher_type: 'frompar-pub'
   outputmap:
     output: minintup
 environment:
-  environment-type: 'docker-encapsulated'
+  environment_type: 'docker-encapsulated'
   envscript: /resources/ntuplingenv.sh
   image: lukasheinrich/dilepton_ntupling
   resources:

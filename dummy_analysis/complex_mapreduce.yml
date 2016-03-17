@@ -6,59 +6,52 @@ stages:
     parameters:
       parameter_one: '{myparameter}'
     scheduler:
-      scheduler-type: 'singlestep-from-context'
-      steps:
-        single: {$ref: 'dummy_analysis/dataacquisition.yml'} 
+      scheduler_type: 'single-from-ctx'
+      step: {$ref: 'dummy_analysis/dataacquisition.yml'} 
   - name: data_acquisition2
     parameters:
       parameter_two: '{a_list}'
       parameter_out: 'theoutput_{index}'
     scheduler:
-      scheduler-type: 'map-from-context'
-      steps:
-        map: {$ref: 'dummy_analysis/mappingstep.yml'} 
+      scheduler_type: 'map-from-ctx'
+      step: {$ref: 'dummy_analysis/mappingstep.yml'} 
       map_parameter: parameter_two
       to_input: inputpar
-      stepname: 'contextmapnode_{index}'
   - name: mapstage
     dependencies:
       - data_acquisition
     parameters:
       parameter_out: 'theoutput_{index}'
     scheduler:
-      scheduler-type: 'map-from-dep-output'
-      steps:
-        map: {$ref: 'dummy_analysis/mappingstep.yml'}
-      from_stages: data_acquisition
-      take_outputs: acq_out
+      scheduler_type: 'map-from-dep'
+      step: {$ref: 'dummy_analysis/mappingstep.yml'}
+      from_stages:
+        - data_acquisition
+      outputs: acq_out
       to_input: inputpar
-      stepname: 'mapnode_{index}'
   - name: mapstage2
     dependencies:
       - mapstage
     parameters:
       parameter_out: 'anotheroutput_{index}'
     scheduler:
-      scheduler-type: 'map-from-dep-output'
-      steps:
-        map: {$ref: 'dummy_analysis/mappingstep.yml'}
+      scheduler_type: 'map-from-dep'
+      step: {$ref: 'dummy_analysis/mappingstep.yml'}
       from_stages:
         - mapstage
-      take_outputs: output
+      outputs: output
       to_input: inputpar
-      stepname: 'newmapnode_{index}'
   - name: reduce
     dependencies:
       - mapstage
     parameters:
       out: mergedfile.root
     scheduler:
-      scheduler-type: 'reduce-from-dep-output'
-      steps:
-        reduce: {$ref: 'dummy_analysis/reducestep.yml'}
+      scheduler_type: 'reduce-from-dep'
+      step: {$ref: 'dummy_analysis/reducestep.yml'}
       from_stages:
         - mapstage
-      take_outputs: output
+      outputs: output
       to_input: in
   - name: reduce2
     dependencies:
@@ -66,12 +59,11 @@ stages:
     parameters:
       out: mergedfile2.root
     scheduler:
-      scheduler-type: 'reduce-from-dep-output'
-      steps:
-        reduce: {$ref: 'dummy_analysis/reducestep.yml'}
+      scheduler_type: 'reduce-from-dep'
+      step: {$ref: 'dummy_analysis/reducestep.yml'}
       from_stages:
         - mapstage2
-      take_outputs: output
+      outputs: output
       to_input: in
   - name: reduce3
     dependencies:
@@ -79,12 +71,11 @@ stages:
     parameters:
       out: mergedfile3.root
     scheduler:
-      scheduler-type: 'reduce-from-dep-output'
-      steps:
-        reduce: {$ref: 'dummy_analysis/reducestep.yml'}
+      scheduler_type: 'reduce-from-dep'
+      step: {$ref: 'dummy_analysis/reducestep.yml'}
       from_stages:
         - data_acquisition2
-      take_outputs: output
+      outputs: output
       to_input: in
   - name: metareduce
     dependencies:
@@ -94,12 +85,11 @@ stages:
     parameters:
       out: mergedfile3.root
     scheduler:
-      scheduler-type: 'reduce-from-dep-output'
-      steps:
-        reduce: {$ref: 'dummy_analysis/reducestep.yml'}
+      scheduler_type: 'reduce-from-dep'
+      step: {$ref: 'dummy_analysis/reducestep.yml'}
       from_stages:
         - reduce
         - reduce2
         - reduce3
-      take_outputs: reduced
+      outputs: reduced
       to_input: in

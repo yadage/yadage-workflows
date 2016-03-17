@@ -9,6 +9,5 @@ stages:
       outputyoda: '/workdir/output.yoda'
       analysis: '{rivet_analysis}'
     scheduler:
-      scheduler-type: 'singlestep-from-context'
-      steps:
-        single: {$ref: 'pheno_workflows/rivet.yml'}
+      scheduler_type: 'single-from-ctx'
+      step: {$ref: 'pheno_workflows/rivet.yml'}
