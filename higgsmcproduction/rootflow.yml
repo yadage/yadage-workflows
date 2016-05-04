@@ -38,4 +38,4 @@ stages:
       step: {$ref: 'steps.yml#/rootmerge'}
       parameters:
         mergedfile: '{workdir}/anamerged.root'
-        inputfiles: {stages: 'subchain.*.analysis', output: analysis_output}
+        inputfiles: {stages: 'subchain.[*].analysis', output: analysis_output}
