@@ -1,4 +1,0 @@
-========== ADAGE LOG BEGIN at 2016-05-02T16:54:33.619958 ==========
----------- snapshot at 2016-05-02T16:54:33.620148
----------- snapshot at 2016-05-02T16:54:33.761644
-name: init obj: <Node name: init id: 720fe3c4-665c-45f9-a091-8f96f2b85825 state: RUNNING> submitted: True
