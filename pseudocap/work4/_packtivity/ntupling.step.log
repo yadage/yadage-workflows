@@ -1,0 +1,16 @@
+starting log for step: ntupling
+context: 
+ {'readwrite': [u'/Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4'], 'readonly': [], 'metadir': '/Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/_packtivity'}
+
+--------------
+run in docker container: lukasheinrich/dilepton_ntupling
+with env: /resources/ntuplingenv.sh
+command: ./DileptonAnalysis -unblind -truth -nomllalpgenfilter -mc -maxsyst 1 -m /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/mini.root -f /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/files.list
+resources: ['CVMFS']
+--------------
+    
+dogrid: False do_cvmfs: True
+docker run  command: 
+cvmfs_config probe && docker run --rm -v /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4:/Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4:rw -v /cvmfs:/cvmfs --cidfile /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/_packtivity/ntupling.cid lukasheinrich/dilepton_ntupling sh -c 'source /resources/ntuplingenv.sh && ./DileptonAnalysis -unblind -truth -nomllalpgenfilter -mc -maxsyst 1 -m /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/mini.root -f /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/files.list'
+reached return for docker_enc_handler
+ntupling result: {'output': '/Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/mini.root'}

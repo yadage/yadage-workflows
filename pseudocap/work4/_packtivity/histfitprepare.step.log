@@ -1,0 +1,16 @@
+starting log for step: histfitprepare
+context: 
+ {'readwrite': [u'/Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4'], 'readonly': [], 'metadir': '/Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/_packtivity'}
+
+--------------
+run in docker container: lukasheinrich/dilepton_histfitprep
+with env: /resources/prepareenv.sh
+command: python preparehistfit.py /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/mini.root file.eff xsec.root 12345 /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/out.root /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/out.yield
+resources: ['CVMFS']
+--------------
+    
+dogrid: False do_cvmfs: True
+docker run  command: 
+cvmfs_config probe && docker run --rm -v /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4:/Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4:rw -v /cvmfs:/cvmfs --cidfile /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/_packtivity/histfitprepare.cid lukasheinrich/dilepton_histfitprep sh -c 'source /resources/prepareenv.sh && python preparehistfit.py /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/mini.root file.eff xsec.root 12345 /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/out.root /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/out.yield'
+reached return for docker_enc_handler
+histfitprepare result: {'output_tree': '/Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/out.root', 'output_yield': '/Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/out.yield'}

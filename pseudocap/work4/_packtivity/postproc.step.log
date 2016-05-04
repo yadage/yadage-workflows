@@ -1,0 +1,16 @@
+starting log for step: postproc
+context: 
+ {'readwrite': [u'/Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4'], 'readonly': [], 'metadir': '/Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/_packtivity'}
+
+--------------
+run in docker container: lukasheinrich/dilepton_fit
+with env: /resources/fitenv.sh
+command: /resources/pMSSM-TwoLep-Fit/post_fit.sh /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/fit.tgz /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/postproc 12345 /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/results.yaml
+resources: ['CVMFS']
+--------------
+    
+dogrid: False do_cvmfs: True
+docker run  command: 
+cvmfs_config probe && docker run --rm -v /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4:/Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4:rw -v /cvmfs:/cvmfs --cidfile /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/_packtivity/postproc.cid lukasheinrich/dilepton_fit sh -c 'source /resources/fitenv.sh && /resources/pMSSM-TwoLep-Fit/post_fit.sh /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/fit.tgz /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/postproc 12345 /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/results.yaml'
+reached return for docker_enc_handler
+postproc result: {'output': '/Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/results.yaml'}

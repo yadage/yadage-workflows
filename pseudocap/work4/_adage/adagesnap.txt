@@ -1,0 +1,12 @@
+========== ADAGE LOG BEGIN at 2016-05-03T02:18:08.917721 ==========
+---------- snapshot at 2016-05-03T02:18:08.917906
+---------- snapshot at 2016-05-03T02:18:09.101543
+name: init obj: <Node name: init id: 483c0413-6fd5-471b-bc2d-dea010944241 state: RUNNING> submitted: True
+---------- snapshot at 2016-05-03T02:18:12.894643
+name: init obj: <Node name: init id: 483c0413-6fd5-471b-bc2d-dea010944241 state: SUCCESS> submitted: True
+name: download obj: <Node name: download id: db97065f-2907-4b9d-a38d-ca330570272f state: SUCCESS> submitted: True
+name: ntupling obj: <Node name: ntupling id: 289b0656-092b-4e4d-b83e-7a11c240d31e state: SUCCESS> submitted: True
+name: histfitprepare obj: <Node name: histfitprepare id: 352029e2-3649-4d66-b569-5d5ceef1ecb2 state: SUCCESS> submitted: True
+name: fit obj: <Node name: fit id: 876cc197-9837-4dde-ae16-4c55bf435c60 state: SUCCESS> submitted: True
+name: postproc obj: <Node name: postproc id: 2a90ef5c-a526-4353-b122-533942e869c9 state: SUCCESS> submitted: True
+========== ADAGE LOG END at 2016-05-03T02:18:12.895173 ==========

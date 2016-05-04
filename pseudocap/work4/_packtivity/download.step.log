@@ -1,0 +1,16 @@
+starting log for step: download
+context: 
+ {'readwrite': [u'/Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4'], 'readonly': [], 'metadir': '/Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/_packtivity'}
+
+--------------
+run in docker container: lukasheinrich/dilepton_download
+with env: /resources/downloadenv.sh
+command: /resources/download.py this.is.a.dataset /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/grid_download /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/files.list
+resources: ['CVMFS', 'GRIDProxy']
+--------------
+    
+dogrid: True do_cvmfs: True
+docker run  command: 
+cvmfs_config probe && docker run --rm -v /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4:/Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4:rw -v /cvmfs:/cvmfs -v /home/recast/recast_auth:/recast_auth --cidfile /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/_packtivity/download.cid lukasheinrich/dilepton_download sh -c 'source /resources/downloadenv.sh && /resources/download.py this.is.a.dataset /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/grid_download /Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/files.list'
+reached return for docker_enc_handler
+download result: {'output': '/Users/lukas/Code/yadagedev/yadage/examples/testflows/pseudocap/work4/files.list'}
