@@ -1,0 +1,10 @@
+process:
+  process_type: 'string-interpolated-cmd'
+  cmd: 'rivet -a {analysis} -H {outputyoda} {inputhepmc}'
+publisher:
+  publisher_type: 'frompar-pub'
+  outputmap:
+    yodafile: outputyoda
+environment:
+  environment_type: 'docker-encapsulated'
+  image: lukasheinrich/rivet-with-tex
