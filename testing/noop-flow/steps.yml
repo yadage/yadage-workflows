@@ -1,0 +1,20 @@
+hello:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: 'echo hello {parone}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      hello: parone
+  environment:
+    environment_type: 'noop-env'
+world:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: 'echo {parone} {partwo}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      hello: parone
+  environment:
+    environment_type: 'noop-env'
