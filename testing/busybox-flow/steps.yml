@@ -1,0 +1,23 @@
+hello:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: 'echo hello {parone} | tee {outputfile}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      hello: parone
+      filename: outputfile
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: busybox
+world:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: 'cat {inputfile}; echo {parone} {partwo} | tee {outputfile}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      hello: parone
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: busybox

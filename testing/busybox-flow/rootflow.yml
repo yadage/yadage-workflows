@@ -1,0 +1,20 @@
+stages:
+  - name: hello
+    dependencies: []
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        parone: 'WORLD'
+        outputfile: '{workdir}/hello.txt'
+      step: {$ref: 'steps.yml#/hello'}
+  - name: world
+    dependencies: ['hello']
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        parone: 'HELLO'
+        partwo: {stages: hello, output: hello, unwrap: true}
+        outputfile: '{workdir}/world.txt'
+        inputfile: {stages: hello, output: filename, unwrap: true}
+      step: {$ref: 'steps.yml#/world'}
+  
