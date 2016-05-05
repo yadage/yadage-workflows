@@ -1,7 +1,7 @@
 prepare:
   process:
     process_type: 'string-interpolated-cmd'
-    cmd: './paramfromyaml.py --madgraph HC_UFO -i "{{kHzz: {par1}, kAzz: {par1}, kHww: {par2}, kAww: {par2}}}" {param_card}'
+    cmd: './paramfromyaml.py --madgraph HC_UFO -i "{{kHzz: {kHzz}, kAzz: {kAzz}, kHww: {kHww}, kAww: {kAww}}}" {param_card}'
   publisher:
     publisher_type: 'frompar-pub'
     outputmap:

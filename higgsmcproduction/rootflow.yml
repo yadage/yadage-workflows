@@ -5,8 +5,10 @@ stages:
       scheduler_type: singlestep-stage
       step: {$ref: 'steps.yml#/prepare'}
       parameters:
-        par1: {stages: init, output: par1}
-        par2: {stages: init, output: par2}
+        kHzz: {stages: init, output: kHzz}
+        kAzz: {stages: init, output: kAzz}
+        kHww: {stages: init, output: kHww}
+        kAww: {stages: init, output: kAww}
         param_card: '{workdir}/param.dat'
 
   - name: grid
