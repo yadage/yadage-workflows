@@ -1,7 +1,7 @@
 prepare:
   process:
     process_type: 'string-interpolated-cmd'
-    cmd: ./paramfromtemplate.py inputs/template_paramcard.dat {param_card}  -i "{{kHzz: {kHzz}, kAzz: {kAzz}, kHww: {kHww}, kAww: {kAww}}}"
+    cmd: './paramfromtemplate.py inputs/template_paramcard.dat {param_card}  -i "{{kHzz: {kHzz}, kAzz: {kAzz}, kHww: {kHww}, kAww: {kAww}}}"
   publisher:
     publisher_type: 'frompar-pub'
     outputmap:
