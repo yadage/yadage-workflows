@@ -22,10 +22,10 @@ stages:
         output_rootfile: '{workdir}/outputfile.root'
         
   - name: analysis
-    dependencies: ['delphes']
+    dependencies: ['pythia_delphes']
     scheduler:
       scheduler_type: singlestep-stage
       step: {$ref: 'steps.yml#/analysis'}
       parameters:
-        fromdelphes: {stages: delphes, output: delphesoutput}
+        fromdelphes: {stages: pythia_delphes, output: delphesoutput}
         analysis_output: '{workdir}/anaout.root'
