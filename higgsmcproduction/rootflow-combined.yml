@@ -1,0 +1,43 @@
+stages:
+  - name: prepare
+    dependencies: ['init']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'steps.yml#/prepare'}
+      parameters:
+        kHzz: {stages: init, output: kHzz}
+        kAzz: {stages: init, output: kAzz}
+        kHww: {stages: init, output: kHww}
+        kAww: {stages: init, output: kAww}
+        param_card: '{workdir}/param.dat'
+
+  - name: grid
+    dependencies: ['prepare']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'steps.yml#/grid'}
+      parameters:
+        param_card: {stages: prepare, output: param_card}
+        gridpack: '{workdir}/grid.tar.gz'
+
+  - name: subchain
+    dependencies: ['grid']
+    scheduler:
+      scheduler_type: multistep-stage
+      workflow: {$ref: 'subchain-combined.yml'}
+      parameters:
+        gridpack: {stages: grid, output: gridpack, unwrap: true}
+        nevents: {stages: init, output: nevents, unwrap: true}
+        seed: {stages: init, output: seeds, flatten: true}
+      scatter:
+        method: zip
+        parameters: ['seed']
+
+  - name: rootmerge
+    dependencies: ['subchain']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'steps.yml#/rootmerge'}
+      parameters:
+        mergedfile: '{workdir}/anamerged.root'
+        inputfiles: {stages: 'subchain.[*].analysis', output: analysis_output}

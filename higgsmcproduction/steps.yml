@@ -58,6 +58,18 @@ delphes:
     environment_type: 'docker-encapsulated'
     image: 'lukasheinrich/higgs-mc-studies'
 
+pythia_delphes:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: './combined_pythia_delphes.py {lhefile} {pythia_settings_file} {delphes_detector_card}  {output_rootfile}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      delphesoutput: output_rootfile
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: 'lukasheinrich/higgs-mc-studies'
+
 analysis:
   process:
     process_type: 'string-interpolated-cmd'
