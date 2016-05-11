@@ -19,7 +19,7 @@ stages:
         lhefile: {stages: madevent, output: lhefile}
         pythia_settings_file: /analysis/mainPythiaMLM.cmnd
         delphes_detector_card: /analysis/template_cards/modified_delphes_card_ATLAS.tcl
-        outputfile: '{workdir}/outputfile.root'
+        output_rootfile: '{workdir}/outputfile.root'
         
   - name: analysis
     dependencies: ['delphes']
