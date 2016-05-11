@@ -14,7 +14,7 @@ stages:
     dependencies: ['madevent']
     scheduler:
       scheduler_type: singlestep-stage
-      step: {$ref: 'steps.yml#/pythia'}
+      step: {$ref: 'steps.yml#/pythia_delphes'}
       parameters:
         lhefile: {stages: madevent, output: lhefile}
         pythia_settings_file: /analysis/mainPythiaMLM.cmnd
