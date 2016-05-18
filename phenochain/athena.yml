@@ -1,0 +1,11 @@
+process:
+  process_type: 'string-interpolated-cmd'
+  cmd: 'source /analysis/setup.sh && export INPUT={input} && export OUTPUT={output} && athena.py jo.py'
+publisher:
+  publisher_type: 'frompar-pub'
+  outputmap:
+    output: output
+environment:
+  environment_type: 'docker-encapsulated'
+  image: 'lukasheinrich/quickathenahepmc'
+
