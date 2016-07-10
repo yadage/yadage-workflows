@@ -1,0 +1,10 @@
+stepA:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: 'echo :::: a dummy packtivity with parameter {first} ::::'
+  publisher:
+    publisher_type: 'constant-pub'
+    publish:
+      outputA: valueA
+  environment:
+    environment_type: 'localproc-env'

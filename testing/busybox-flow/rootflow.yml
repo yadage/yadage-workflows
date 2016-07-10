@@ -13,8 +13,7 @@ stages:
       scheduler_type: singlestep-stage
       parameters:
         parone: 'HELLO'
-        partwo: {stages: hello, output: hello, unwrap: true}
+        partwo: {stages: hello, output: hellopar, unwrap: true}
         outputfile: '{workdir}/world.txt'
         inputfile: {stages: hello, output: filename, unwrap: true}
       step: {$ref: 'steps.yml#/world'}
-  

@@ -1,0 +1,10 @@
+subStep:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: 'echo ____ substep packtivity {subpar} _____'
+  publisher:
+    publisher_type: 'constant-pub'
+    publish:
+      outputSub: subValue
+  environment:
+    environment_type: 'localproc-env'

@@ -1,0 +1,15 @@
+stages:
+  - name: 'stageA'
+    dependencies: []
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        first: first
+      step: {$ref: 'rootsteps.yml#/stepA'}
+  - name: 'stageB'
+    dependencies: ['stageA']
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        subpar: {stages: stageA, output: outputA, unwrap: true}
+      workflow: {$ref: 'subflow.yml'}
