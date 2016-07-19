@@ -1,0 +1,23 @@
+stepA:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: 'echo hello'
+  publisher:
+    publisher_type: 'constant-pub'
+    publish:
+      hellopar: parone
+      filename: outputfile
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: busybox
+stepB:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: 'echo hello'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      hellopar: parone
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: busybox

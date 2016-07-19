@@ -1,0 +1,20 @@
+stages:
+  - name: stage1
+    dependencies: []
+    scheduler:
+      scheduler_type: 'singlestep-stage'
+      parameters:
+        one: one
+        two: two
+      step: {$ref: steps.yml#/stepA}
+  - name: stage2
+    dependencies: []
+    scheduler:
+      scheduler_type: 'multistep-stage'
+      parameters:
+        one: [1,2,3]
+        two: two
+      step: {$ref: steps.yml#/stepA}
+      scatter:
+        parameters: [one]
+        method: zip
