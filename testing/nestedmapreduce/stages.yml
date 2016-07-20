@@ -1,0 +1,18 @@
+stages:
+  - name: map
+    dependencies: []
+    scheduler:
+      scheduler_type: multistep-stage
+      parameters:
+        inputpar: [1,2,3]
+      workflow: {$ref: subflow.yml}
+      scatter:
+        method: zip
+        parameters: [inputpar]
+  - name: reduce
+    dependencies: [map]
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        input: {stages: 'map.[*].stage1', output: outputA}
+      step: {$ref: steps.yml#/stepA}
