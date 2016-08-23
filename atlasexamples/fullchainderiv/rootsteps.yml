@@ -1,0 +1,27 @@
+dumphepmc: 
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: 'source resources/env.sh && athena.py -c ''"''"''INPUT=["{inputevgen}"];OUTPUT="{outputhepmc}"''"''"'' McParticleAlgs/GenEventAsciiWriter_jobOptions.py'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      hepmcfile: outputhepmc
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: lukasheinrich/generic_evgen
+    resources:
+      - CVMFS
+
+root_merge:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: 'source resources/env.sh AtlasDerivation,20.7.6.2,here && hadd {mergedfile} {rootfiles}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      mergedfile: mergedfile
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: lukasheinrich/athena_trfsbase
+    resources:
+      - CVMFS

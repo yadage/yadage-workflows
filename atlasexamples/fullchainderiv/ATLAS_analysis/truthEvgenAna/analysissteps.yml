@@ -1,0 +1,11 @@
+simpleanalysis:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: 'source ~/.bashrc && MyApp.exe {evgenfile} {plotfile}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      plots: plotfile
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: lukasheinrich/bnltutorial

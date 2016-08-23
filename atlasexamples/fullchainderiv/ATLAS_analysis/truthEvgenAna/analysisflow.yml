@@ -1,0 +1,9 @@
+stages:
+  - name: truth_analysis
+    dependencies: ['init']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'analysissteps.yml#/simpleanalysis'}
+      parameters:
+        evgenfile: {stages: init, output: evgenfile, unwrap: true}
+        plotfile: '{workdir}/analysis_plots.png'

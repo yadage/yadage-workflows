@@ -1,0 +1,70 @@
+stages:
+  - name: madgraph_gen
+    dependencies: ['init']
+    scheduler:
+      scheduler_type: singlestep-stage
+      workflow: {$ref: 'signalGeneration/madgraph_genflow.yml'}
+      parameters:
+        proc_card: {stages: init, output: proc_card, unwrap: true}
+        param_card: {stages: init, output: param_card, unwrap: true}
+        keywords: 'exotic,BSMHiggs'
+        contact: lukas.heinrich@cern.ch
+        nevents: {stages: init, output: nevents, unwrap: true}
+        DSID: {stages: init, output: DSID, unwrap: true}
+        generate_seed: {stages: init, output: generate_seed, unwrap: true}
+
+  - name: dumphepmc
+    dependencies: ['madgraph_gen']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'rootsteps.yml#/dumphepmc'}
+      parameters:
+        inputevgen: {stages: 'madgraph_gen.[*].generate', output: ouputEVNT, unwrap: true}
+        outputhepmc: '{workdir}/output.hepmc'
+
+  - name: evgen_truthana
+    dependencies: ['madgraph_gen']
+    scheduler:
+      scheduler_type: singlestep-stage
+      workflow: {$ref: 'ATLAS_analysis/truthEvgenAna/analysisflow.yml'}
+      parameters:
+        evgenfile: {stages: 'madgraph_gen.[*].generate', output: ouputEVNT, unwrap: true}
+
+
+  - name: phenoflow
+    dependencies: ['dumphepmc']
+    scheduler:
+      scheduler_type: singlestep-stage
+      workflow: {$ref: 'phenoAnalysis/phenoflow.yml'}
+      parameters:
+        hepmcfile: {stages: 'dumphepmc', output: hepmcfile, unwrap: true}
+        rivet_analysis: MC_GENERIC
+
+  - name: sim_reco
+    dependencies: ['madgraph_gen']
+    scheduler:
+      scheduler_type: singlestep-stage
+      workflow: {$ref: 'ATLAS_sim_reco/sim_reco_flow.yml'}
+      parameters:
+        evgen: {stages: 'madgraph_gen.[*].generate', output: ouputEVNT, unwrap: true}
+        nevents: -1
+        simulation_seed: {stages: init, output: simulation_seed, unwrap: true}
+
+  - name: derivation
+    dependencies: ['sim_reco']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'reductionFramework/derivationsteps.yml#/aod_daod_derivation'}
+      parameters:
+        aodfile: {stages: 'sim_reco.[*].reconstruction', output: aodfile, unwrap: true}
+        daodfile: '{workdir}/my.DAOD.pool.root'
+        ptag: p2656
+
+  - name: truth_derivation
+    dependencies: ['madgraph_gen']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'reductionFramework/derivationsteps.yml#/evgen_daod_derivation'}
+      parameters:
+        evgenfile: {stages: 'madgraph_gen.[*].generate', output: ouputEVNT, unwrap: true}
+        truthderivation: '{workdir}/my.TRUTH_DAOD.pool.root'

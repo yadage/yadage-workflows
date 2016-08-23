@@ -1,0 +1,28 @@
+prepare:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: 'python jo_maker/make_jobo.py jo_maker/template.py {evgen_joboptions} {keywords} dummy_description example_evgen {proc_card} {param_card} {contact}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      joboptions: evgen_joboptions
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: lukasheinrich/generic_evgen
+    resources:
+      - CVMFS
+
+generate:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: 'source resources/env.sh && Generate_tf.py --ecmEnergy={ecmEnergy} --runNumber={DSID} --firstEvent=1 --asetup="" --maxEvents={nevents} --randomSeed={seed} --jobConfig={joboptions} --outputEVNTFile={ouputEVNT}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      ouputEVNT: ouputEVNT
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: lukasheinrich/generic_evgen
+    resources:
+      - CVMFS
+

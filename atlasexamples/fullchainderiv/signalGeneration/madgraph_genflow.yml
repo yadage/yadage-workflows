@@ -1,0 +1,25 @@
+stages:
+  - name: prepare
+    dependencies: ['init']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'madgraph_gen_steps.yml#/prepare'}
+      parameters:
+        proc_card: {stages: init, output: proc_card, unwrap: true}
+        param_card: {stages: init, output: param_card, unwrap: true}
+        evgen_joboptions: '{workdir}/jo.py'
+        keywords: {stages: init, output: keywords, unwrap: true}
+        contact: {stages: init, output: contact, unwrap: true}
+  - name: generate
+    dependencies: ['prepare']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'madgraph_gen_steps.yml#/generate'}
+      parameters:
+        ecmEnergy: 13000
+        nevents: {stages: init, output: nevents, unwrap: true}
+        DSID: {stages: init, output: DSID, unwrap: true}
+        seed: {stages: init, output: generate_seed, unwrap: true}        
+        joboptions: {stages: prepare, output: joboptions, unwrap: true}
+        ouputEVNT: '{workdir}/my.EVNT.pool.root'
+

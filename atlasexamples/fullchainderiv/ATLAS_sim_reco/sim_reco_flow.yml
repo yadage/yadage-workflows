@@ -1,0 +1,38 @@
+stages:
+  - name: simulation
+    dependencies: ['init']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'sim_reco_steps.yml#/simulation'}
+      parameters:
+        evgenfile: {stages: init, output: evgen, unwrap: true}
+        hitsfile: '{workdir}/my.HITS.pool.root'
+        AMItag: a766
+        maxevts: {stages: init, output: nevents, unwrap: true}
+        simseed: {stages: init, output: simulation_seed, unwrap: true}
+
+  - name: digitization
+    dependencies: ['simulation']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'sim_reco_steps.yml#/digitization'}
+      parameters:
+        hitsfile: {stages: simulation, output: hitsfile, unwrap: true}
+        rdofile: '{workdir}/my.RDO.pool.root'
+        maxevts: -1
+        conditions: 'default:OFLCOND-RUN12-SDR-19'
+        geometry: 'default:ATLAS-R2-2015-03-01-00_VALIDATION'
+
+  - name: reconstruction
+    dependencies: ['digitization']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'sim_reco_steps.yml#/reconstruction'}
+      parameters:
+        rdofile: {stages: digitization, output: rdofile, unwrap: true}
+        esdfile: '{workdir}/my.ESD.pool.root'
+        aodfile: '{workdir}/my.AOD.pool.root'
+        maxevts: -1
+        conditions: default:OFLCOND-MC15c-SDR-09
+        geometry: default:ATLAS-R2-2015-03-01-00
+

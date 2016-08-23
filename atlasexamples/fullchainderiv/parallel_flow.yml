@@ -1,0 +1,45 @@
+stages:
+  - name: parallel_production
+    dependencies: ['init']
+    scheduler:
+      scheduler_type: multistep-stage
+      workflow: {$ref: 'rootflow.yml'}
+      parameters:
+        nevents: {stages: init, output: events_per_branch, flatten: true}
+        DSID: {stages: init, output: DSID, flatten: true}
+        generate_seed: {stages: init, output: generation_seeds, flatten: true}
+        simulation_seed: {stages: init, output: simulation_seed, flatten: true}
+        proc_card: {stages: init, output: proc_card, flatten: true}
+        param_card: {stages: init, output: param_card, flatten: true}
+      scatter:
+        method: zip
+        parameters: ['generate_seed']
+
+  - name: reco_daod_merge
+    dependencies: ['parallel_production.[*].derivation']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'rootsteps.yml#/root_merge'}
+      parameters:
+        rootfiles: {stages: 'parallel_production.[*].derivation', output: daodfile, flatten: true}
+        mergedfile: '{workdir}/merged.DAOD.reco.pool.root'
+
+  - name: truth_daod_merge
+    dependencies: ['parallel_production.[*].truth_derivation']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'rootsteps.yml#/root_merge'}
+      parameters:
+        rootfiles: {stages: 'parallel_production.[*].truth_derivation', output: truthderiv, flatten: true}
+        mergedfile: '{workdir}/merged.DAOD.truth.pool.root'
+
+  - name: delphes_merge
+    dependencies: ['parallel_production.[*].phenoflow.[*].delphes']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'rootsteps.yml#/root_merge'}
+      parameters:
+        rootfiles: {stages: 'parallel_production.[*].phenoflow.[*].delphes', output: rootfile, flatten: true}
+        mergedfile: '{workdir}/merged.delphes.root'
+
+

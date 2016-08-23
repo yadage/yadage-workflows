@@ -1,0 +1,30 @@
+stages:
+
+  - name: rivet
+    dependencies: ['init']
+    scheduler:
+      scheduler_type: 'singlestep-stage'
+      parameters:
+        outputyoda: '{workdir}/output.yoda'
+        analysis: {stages: init, output: rivet_analysis, unwrap: true}
+        inputhepmc: {stages: init, output: hepmcfile}
+      step: {$ref: 'phenosteps.yml#/rivet'}
+  - name: rivetplots
+    dependencies: ['rivet']
+    scheduler:
+      scheduler_type: 'singlestep-stage'
+      parameters:
+        yodaplots: '{workdir}/plots'
+        inputyoda: {stages: 'rivet', output: yodafile}
+      step: {$ref: 'phenosteps.yml#/rivetmkhtml'}
+
+  - name: delphes
+    dependencies: ['init']
+    scheduler:
+      scheduler_type: 'singlestep-stage'
+      step: {$ref: 'phenosteps.yml#/delphes'}
+      parameters:
+        outputroot: '{workdir}/output.root'
+        outputlhco: '{workdir}/output.lhco'
+        delphes_card: 'delphes/cards/delphes_card_ATLAS.tcl'
+        inputhepmc: {stages: init, output: hepmcfile}

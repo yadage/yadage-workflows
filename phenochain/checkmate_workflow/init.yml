@@ -1,0 +1,4 @@
+events: 20000
+stop_mass: 750
+neutralino_mass: 300
+analysis: atlas_conf_2013_047

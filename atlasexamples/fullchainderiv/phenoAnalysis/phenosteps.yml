@@ -1,0 +1,37 @@
+delphes:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: 'DelphesHepMC  {delphes_card} {outputroot} {inputhepmc} && root2lhco {outputroot} {outputlhco}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      lhcofile: outputlhco
+      rootfile: outputroot
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: lukasheinrich/root-delphes
+
+rivet:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: 'rivet -a {analysis} -H {outputyoda} {inputhepmc}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      yodafile: outputyoda
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: lukasheinrich/rivet-with-tex
+
+rivetmkhtml:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: 'rivet-mkhtml -o {yodaplots} {inputyoda}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      plots: yodaplots
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: lukasheinrich/rivet-with-tex
+  

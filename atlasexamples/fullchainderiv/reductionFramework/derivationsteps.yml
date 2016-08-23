@@ -1,0 +1,29 @@
+aod_daod_derivation:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: 'source resources/env_with_voms.sh AtlasDerivation,20.7.6.2,here && Reco_tf.py --AMI {ptag} --inputAODFile {aodfile} --outputDAODFile my.DAOD.pool.root && cp *my.DAOD.pool.root {daodfile}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      daodfile: daodfile
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: lukasheinrich/athena_trfsbase
+    resources:
+      - CVMFS
+      - GRIDProxy
+
+evgen_daod_derivation:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: 'source resources/env.sh AtlasDerivation,20.7.6.2,here && Reco_tf.py --inputEVNTFile {evgenfile} --outputDAODFile my.DAOD.pool.root --reductionConf TRUTH0 && cp *my.DAOD.pool.root {truthderivation}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      truthderiv: truthderivation
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: lukasheinrich/athena_trfsbase
+    resources:
+      - CVMFS
+
