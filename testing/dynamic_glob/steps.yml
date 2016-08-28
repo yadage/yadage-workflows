@@ -1,7 +1,7 @@
 acquire:
   process:
     process_type: string-interpolated-cmd
-    cmd: 'curl -o {localname} {source} && unzip {localname}'
+    cmd: 'curl -L -o {localname} {source} && unzip {localname}'
   environment:
     environment_type: 'localproc-env'
   publisher:
