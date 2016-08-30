@@ -1,0 +1,27 @@
+calcavg:
+  process:
+    process_type: 'string-interpolated-cmd'
+#    cmd: 'python /afs/cern.ch/user/a/atrisovi/yadaework/ana-workflows/scripts/calc.py {commasepnum} {outfilename}' 
+    cmd: 'python calc.py {commasepnum} {outfilename}' 
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      calcavgout: outfilename
+  environment:
+#    environment_type: 'localproc-env'
+    environment_type: 'docker-encapsulated'
+    image: anademo
+
+printavg:
+  process:
+    process_type: 'string-interpolated-cmd'
+#    cmd: 'python /afs/cern.ch/user/a/atrisovi/yadaework/ana-workflows/scripts/printavg.py {avgtxtfile} {outfile}'
+    cmd: 'python printavg.py {avgtxtfile} {outfile}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      printresult: outfile
+  environment:
+#    environment_type: 'localproc-env'
+    environment_type: 'docker-encapsulated'
+    image: anademo
