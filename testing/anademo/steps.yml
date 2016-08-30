@@ -10,7 +10,7 @@ calcavg:
   environment:
 #    environment_type: 'localproc-env'
     environment_type: 'docker-encapsulated'
-    image: anademo
+    image: atrisovic/anademo
 
 printavg:
   process:
@@ -24,4 +24,4 @@ printavg:
   environment:
 #    environment_type: 'localproc-env'
     environment_type: 'docker-encapsulated'
-    image: anademo
+    image: atrisovic/anademo
