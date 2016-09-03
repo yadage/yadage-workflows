@@ -1,0 +1,18 @@
+stages:
+  - name: calcavgstage
+    dependencies: []
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        commasepnum: {stages: init, output: numbers, unwrap: true}
+        outfilename: '{workdir}/avg.txt'
+      step: {$ref: 'steps.yml#/calcavg'}
+  - name: printavgstage
+    dependencies: ['calcavgstage']
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        avgtxtfile: {stages: calcavgstage, output: calcavgout, unwrap: true}
+        outfile: '{workdir}/out.txt'
+      step: {$ref: 'steps.yml#/printavg'}
+
