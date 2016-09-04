@@ -1,0 +1,9 @@
+stages:
+  - name: 'manualstep'
+    dependencies: []
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        - key: 'input'
+          value: 'this is an input'
+      step: {$ref: 'stepA_instructions.yml'}

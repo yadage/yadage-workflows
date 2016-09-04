@@ -1,0 +1,18 @@
+process:
+  process_type: 'manual-instructions-proc'
+  instructions: |
+    Hello, read in the text file referred to in the input parameter 'input'
+    and convert it into all upper case ASCII characters and save the file
+    under a filename of your choosing. Thank you.
+
+environment:
+  environment_type: 'manual-env'
+  instructions: |
+    The task should be completable on most unix systems using software like 'tr'
+    The final reults files should be copied to the readwrite location as given
+    by the context
+
+publisher:
+  publisher_type: 'manual-publishing'
+  instructions: |
+    Please publish the file you created under the key 'output'.
