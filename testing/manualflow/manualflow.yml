@@ -1,0 +1,19 @@
+stages:
+  - name: manualstep
+    dependencies: []
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        - key: 'input'
+          value: {stages: init, output: inputfile, unwrap: True}
+      step: {$ref: 'stepA_instructions.yml'}
+  - name: fitstep
+    dependencies:
+      dependency_type: jsonpath_ready
+      expressions: [manualstep]
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        - key: 'input'
+          value: {stages: manualstep, output: output, unwrap: True}
+      step: {$ref: 'stepB_instructions.yml'}
