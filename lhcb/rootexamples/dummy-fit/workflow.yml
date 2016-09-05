@@ -1,9 +1,10 @@
 stages:
   - name: gendata
-    dependencies: []
+    dependencies: ['init']
     scheduler:
       scheduler_type: singlestep-stage
       parameters:
+        events: {stages: init, output: events, unwrap: true}
         outfilename: '{workdir}/data.root'
       step: {$ref: 'steps.yml#/gendata'}
   - name: fitdata
