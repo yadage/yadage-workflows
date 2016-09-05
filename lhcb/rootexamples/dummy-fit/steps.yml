@@ -1,0 +1,25 @@
+gendata:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: root -b -q '"'"'gendata.C("{outfilename}")'"'"'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      data: outfilename
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: atrisovic/rootexample
+
+fitdata:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: root -b -q '"'"'fitdata.C("{data}","{outfile}")'"'"'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      plot: outfile
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: atrisovic/rootexample
+
+ 
