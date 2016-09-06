@@ -1,0 +1,10 @@
+process:
+  process_type: 'string-interpolated-cmd'
+  cmd: 'python ptplot.py {input} {output}'
+environment:
+  environment_type: 'docker-encapsulated'
+  image: lukasheinrich/lhcoplot
+publisher:
+  publisher_type: 'frompar-pub'
+  outputmap:
+    plotfile: output

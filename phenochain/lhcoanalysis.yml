@@ -1,0 +1,16 @@
+stages:
+  - name: mcproduction
+    dependencies: []
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        nevents: {stages: 'init', output: 'nevents', unwrap: true}
+      workflow: {$ref: madgraph_delphes.yml}
+  - name: plotlhco
+    dependencies: [mcproduction]
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        input: {stages: 'mcproduction.[0].delphes', output: 'lhcofile', unwrap: true}
+        output: '{workdir}/plot.png'
+      step: {$ref: plotlhco.yml}
