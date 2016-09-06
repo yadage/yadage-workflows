@@ -1,6 +1,6 @@
 # ROOT example
 
-This ROOT example mimics a physics analysis, where normally the data is first processed and then presented in graphical form. 
+This ROOT example mimics a physics analysis, where normally the data is first processed and then presented in a graphical form. 
 
 This example uses ROOT package [RooFit](https://root.cern.ch/roofit), and it runs with ROOT 6. 
 The code was taken from [here](https://root.cern.ch/root/html/tutorials/roofit/rf502_wspacewrite.C.html) and [here](https://root.cern.ch/root/html/tutorials/roofit/rf503_wspaceread.C.html), and it was slightly modified.
@@ -14,9 +14,9 @@ The workflow has two stages. In the first state, signal and background are gener
 
 `yadage-run workdir workflow.yml input.yml`
 
-See the plot at:
+The final plot is at:
 
-`eog workdir/fitdata/plot.png`
+`workdir/fitdata/plot.png`
 
 ## Run with Docker only
 
