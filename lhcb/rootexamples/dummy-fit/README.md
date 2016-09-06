@@ -1,8 +1,16 @@
-Stage 1 generates signal and background
+# ROOT example
+The workflow has two stages. In the first stage signal and background are generated. In the second stage RooFit makes a fit for the signal and background.
 
-Stage 2 makes a fit for the signal and background 
-
-Code:
-
+This example uses ROOT package RooFit. https://root.cern.ch/roofit
+The code was taken from:
 https://root.cern.ch/root/html/tutorials/roofit/rf502_wspacewrite.C.html
 https://root.cern.ch/root/html/tutorials/roofit/rf503_wspaceread.C.html
+
+## Running with Docker
+
+`docker run -it atrisovic/rootexample bash`
+
+and then:
+
+`root -b -q 'gendata.C(2000,"data.root")'`
+`root -b -q 'fitdata.C("data.root","plot.png")'`
