@@ -11,6 +11,10 @@ The code was taken from [here](https://root.cern.ch/root/html/tutorials/roofit/r
 
 `yadage-run workdir workflow.yml input.yml`
 
+See the plot at:
+
+`eog workdir/fitdata/plot.png`
+
 ## Run with Docker
 
 `docker run -it atrisovic/rootexample bash`
@@ -18,4 +22,5 @@ The code was taken from [here](https://root.cern.ch/root/html/tutorials/roofit/r
 and then:
 
 `root -b -q 'gendata.C(2000,"data.root")'`
+
 `root -b -q 'fitdata.C("data.root","plot.png")'`
