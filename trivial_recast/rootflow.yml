@@ -1,0 +1,18 @@
+stages:
+  - name: recast
+    dependencies: []
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        outputfile: '{workdir}/recast.json'
+      step:
+        process:
+          process_type: 'string-interpolated-cmd'
+          cmd: './runanalysis.sh {outputfile}'
+        publisher:
+          publisher_type: 'frompar-pub'
+          outputmap:
+            outputfile: outputfile
+        environment:
+          environment_type: 'docker-encapsulated'
+          image: lukasheinrich/trivialrecast
