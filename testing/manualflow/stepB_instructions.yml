@@ -5,13 +5,13 @@ process:
     some statistical inference software
 
 environment:
-  environment_type: 'manual-env'
+  environment_type: 'manual-instructions-env'
   instructions: |
     the system should have ROOT, with RooFit installed to run the fit. The
     code can be found at https://github.com/dummyuser/fancyfit.git and
     should compile with gcc 4.9
 
 publisher:
-  publisher_type: 'manual-publishing'
+  publisher_type: 'manual-instructions-pub'
   instructions: |
     Publish the fit results under the keys "CLs_expected" and "CLs_observed"

@@ -4,8 +4,7 @@ stages:
     scheduler:
       scheduler_type: singlestep-stage
       parameters:
-        - key: 'input'
-          value: {stages: init, output: inputfile, unwrap: True}
+        input: {stages: init, output: inputfile, unwrap: True}
       step: {$ref: 'stepA_instructions.yml'}
   - name: fitstep
     dependencies:
@@ -14,6 +13,5 @@ stages:
     scheduler:
       scheduler_type: singlestep-stage
       parameters:
-        - key: 'input'
-          value: {stages: manualstep, output: output, unwrap: True}
+        input: {stages: manualstep, output: output, unwrap: True}
       step: {$ref: 'stepB_instructions.yml'}

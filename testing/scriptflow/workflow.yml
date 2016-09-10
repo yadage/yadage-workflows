@@ -1,0 +1,48 @@
+stages:
+  - name: step_one
+    dependencies: []
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        outputfile: '{workdir}/out.txt'
+        parone: First
+        partwo: Second
+      step:
+          process:
+            process_type: 'interpolated-script-cmd'
+            script: |
+              #!/bin/bash
+              echo Hello World
+              echo {parone} {partwo} | tee {outputfile}
+          publisher:
+            publisher_type: 'frompar-pub'
+            outputmap:
+              outputfile: outputfile
+          environment:
+            environment_type: 'docker-encapsulated'
+            image: busybox
+  - name: step_two
+    dependencies: ['step_one']
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        infile: {stages: step_one, output: outputfile, unwrap: true}
+        outputfile: '{workdir}/secondout.txt'
+      step:
+          process:
+            process_type: 'interpolated-script-cmd'
+            script: |
+              #!/bin/bash
+              echo This is again some prose....
+              echo "Let's show the environment"
+              env
+              echo "finally let's just copy the file but with upper case"
+
+              cat {infile} | tr '[:lower:]' '[:upper:]' > {outputfile}
+          publisher:
+            publisher_type: 'frompar-pub'
+            outputmap:
+              outputfile: outputfile
+          environment:
+            environment_type: 'docker-encapsulated'
+            image: busybox
