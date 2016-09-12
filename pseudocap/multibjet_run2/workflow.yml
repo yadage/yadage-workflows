@@ -1,0 +1,26 @@
+stages:
+  - name: selection
+    dependencies: ['init']
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        dataset: {stages: init, output: dataset, unwrap: true}
+        submitdir: '{workdir}/submitdir'
+        outputprefix: '{workdir}/histfitter.root'
+        did: {stages: init, output: did, unwrap: true}
+      step: {$ref: 'selscript.yml#'}
+  - name: fit
+    dependencies: ['selection']
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        bkgtree: '/data/Bkg_2.4.15-2-0_merged.root'
+        datatree: '/data/Data_2.4.15-2-0.root'
+        outputjson: '{workdir}/fitoutput.json'
+        pointname: 'Gbb_1600_200'
+        gridname: Gbb
+        selectionoutput: {stages: selection, output: histfitterfile, unwrap: true}
+        weightsfile: {stages: init, output: weightsfile, unwrap: true}
+        groupingfile: {stages: init, output: groupingfile, unwrap: true}
+        did: {stages: init, output: did, unwrap: true}
+      step: {$ref: 'fitscript.yml#'}

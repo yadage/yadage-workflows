@@ -1,0 +1,44 @@
+process:
+  process_type: 'interpolated-script-cmd'
+  script: |
+    #!/bin/bash
+    source ~/.bashrc
+    setupATLAS
+    lsetup "root 6.06.02-x86_64-slc6-gcc48-opt"
+    cd /code/multib/HistFitter
+    source ./setup.sh
+    cd analysis/analysis_multib
+
+
+    cd input
+    python mergeTrees.py {selectionoutput} --filters filters/filters_ht.json --weights {weightsfile} --did-to-group {groupingfile} --include-dids {did}  --do-backward-compatibility
+    cd ..
+
+    lumi="5807.51"
+    grid="{gridname}"
+    region="Gbb_A"
+    tag="tag2.4.11-1-0_July00"
+    echo '["{pointname}"]' > point.json
+    cat point.json
+    export HF_MBJ_SIGNALJSON="point.json"
+    export HF_MBJ_BACKGROUNDFILE={bkgtree}
+    export HF_MBJ_DATAFILE={datatree}
+    export HF_MBJ_SIGNALFILE='input/Sig.root'
+    HistFitter.py -wtpf -F excl python/My3bGtt.py _signalRegion $region _lumi $lumi _unblind true _doHFSplitting false 2>&1 | tee fitlog.out
+    
+    resultfile=$(ls results/My3bGtt_*fixSigXSecNominal*_hypotest.root)
+    echo "result file is:  $resultfile"
+    root -b -q 'root2json.C("'"$resultfile"'","hypo_Gbb_%f_%f")'
+
+    jsonfile=$(ls *harvest_list.json)
+    python recast_format.py $jsonfile {outputjson}
+
+publisher:
+  publisher_type: 'frompar-pub'
+  outputmap:
+    limitresult: outputjson
+environment:
+  environment_type: 'docker-encapsulated'
+  image: lukasheinrich/multibfit_cvmfs
+  resources:
+    - CVMFS

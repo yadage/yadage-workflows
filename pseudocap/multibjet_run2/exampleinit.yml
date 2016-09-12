@@ -1,0 +1,4 @@
+dataset: 'mc15_13TeV:mc15_13TeV.370302.MGPy8EG_A14N_GG_bbn1_1600_5000_200.merge.DAOD_SUSY10.e4050_a766_a821_r7676_p2666/'
+weightsfile: weights.json
+groupingfile: grouping.json
+did: 370302
