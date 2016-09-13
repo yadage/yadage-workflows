@@ -10,6 +10,9 @@ process:
     cd analysis/analysis_multib
 
 
+    /recast_auth/getkrb.sh
+    #klist
+    #exit
     cd input
     python mergeTrees.py {selectionoutput} --filters filters/filters_ht.json --weights {weightsfile} --did-to-group {groupingfile} --include-dids {did}  --do-backward-compatibility
     cd ..
@@ -42,3 +45,4 @@ environment:
   image: lukasheinrich/multibfit_cvmfs
   resources:
     - CVMFS
+    - GRIDProxy
