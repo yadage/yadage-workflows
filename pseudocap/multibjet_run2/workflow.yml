@@ -14,8 +14,8 @@ stages:
     scheduler:
       scheduler_type: singlestep-stage
       parameters:
-        bkgtree: '/data/Bkg_2.4.15-2-0_merged.root'
-        datatree: '/data/Data_2.4.15-2-0.root'
+        bkgtree: 'root://eosuser.cern.ch///eos/project/r/recast/Bkg_2.4.15-2-0_merged.root'
+        datatree: 'root://eosuser.cern.ch///eos/project/r/recast/Data_2.4.15-2-0.root'
         outputjson: '{workdir}/fitoutput.json'
         pointname: 'Gbb_1600_200'
         gridname: Gbb
