@@ -17,10 +17,7 @@ stages:
         bkgtree: 'root://eosuser.cern.ch///eos/project/r/recast/Bkg_2.4.15-2-0_merged.root'
         datatree: 'root://eosuser.cern.ch///eos/project/r/recast/Data_2.4.15-2-0.root'
         outputjson: '{workdir}/fitoutput.json'
-        pointname: 'Gbb_1600_200'
-        gridname: Gbb
         selectionoutput: {stages: selection, output: histfitterfile, unwrap: true}
         weightsfile: {stages: init, output: weightsfile, unwrap: true}
-        groupingfile: {stages: init, output: groupingfile, unwrap: true}
         did: {stages: init, output: did, unwrap: true}
       step: {$ref: 'fitscript.yml#'}
