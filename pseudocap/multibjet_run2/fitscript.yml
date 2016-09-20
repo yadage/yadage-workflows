@@ -14,16 +14,16 @@ process:
     cd input
     cat << EOF > dummygrouping.json
     {{
-    "{did}": "recastpoint"
+    "{did}": "recastpoint_0_0"
     }}
     EOF
 
-    python mergeTrees.py {selectionoutput} --filters filters/filters_ht.json --weights {weightsfile} --did-to-group dummygrouping.json --include-dids {did}  --do-backward-compatibility
+    python mergeTrees.py {selectionoutput} --filters filters/filters_ht.json --weights {weightsfile} --did-to-group dummygrouping.json --include-dids {did}  --do-backward-compatibility --groups-sig recastpoint
     cd ..
 
     lumi="5807.51"
     region="Gbb_A"
-    echo '["recastpoint"]' > point.json
+    echo '["recastpoint_0_0"]' > point.json
     cat point.json
     export HF_MBJ_SIGNALJSON="point.json"
     export HF_MBJ_BACKGROUNDFILE={bkgtree}
@@ -33,7 +33,7 @@ process:
     
     resultfile=$(ls results/My3bGtt_*fixSigXSecNominal*_hypotest.root)
     echo "result file is:  $resultfile"
-    root -b -q 'root2json.C("'"$resultfile"'","hypo_Gbb_%f_%f")'
+    root -b -q 'root2json.C("'"$resultfile"'","hypo_recastpoint_%f_%f")'
 
     jsonfile=$(ls *harvest_list.json)
     python recast_format.py $jsonfile {outputjson}
