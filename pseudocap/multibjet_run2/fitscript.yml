@@ -8,20 +8,22 @@ process:
     cd /code/multib/HistFitter
     source ./setup.sh
     cd analysis/analysis_multib
-
-
     /recast_auth/getkrb.sh
-    #klist
-    #exit
+  
+  
     cd input
-    python mergeTrees.py {selectionoutput} --filters filters/filters_ht.json --weights {weightsfile} --did-to-group {groupingfile} --include-dids {did}  --do-backward-compatibility
+    cat << EOF > dummygrouping.json
+    {{
+    "{did}": "recastpoint"
+    }}
+    EOF
+
+    python mergeTrees.py {selectionoutput} --filters filters/filters_ht.json --weights {weightsfile} --did-to-group dummygrouping.json --include-dids {did}  --do-backward-compatibility
     cd ..
 
     lumi="5807.51"
-    grid="{gridname}"
     region="Gbb_A"
-    tag="tag2.4.11-1-0_July00"
-    echo '["{pointname}"]' > point.json
+    echo '["recastpoint"]' > point.json
     cat point.json
     export HF_MBJ_SIGNALJSON="point.json"
     export HF_MBJ_BACKGROUNDFILE={bkgtree}
