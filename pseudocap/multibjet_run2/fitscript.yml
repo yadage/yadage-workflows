@@ -18,7 +18,7 @@ process:
     }}
     EOF
 
-    python mergeTrees.py {selectionoutput} --filters filters/filters_ht.json --weights {weightsfile} --did-to-group dummygrouping.json --include-dids {did}  --do-backward-compatibility --nevents 100
+    python mergeTrees.py {selectionoutput} --filters filters/filters_ht.json --weights {weightsfile} --did-to-group dummygrouping.json --include-dids {did}  --do-backward-compatibility
     cd ..
 
     lumi="5807.51"
