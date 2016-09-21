@@ -1,0 +1,18 @@
+process:
+  process_type: 'interpolated-script-cmd'
+  script: |
+    #!/bin/bash
+    python create_prodConf.py Run-I/input_step6.json {outputdir} prodConf_DaVinci.py {inputfile}
+    export USER=`whoami`
+    source  /cvmfs/lhcb.cern.ch/lib/LbLogin.sh --no-userarea
+    LbLogin -c x86_64-slc6-gcc48-opt
+    lb-run --use "AppConfig v3r277" --use ProdConf DaVinci v36r1p3 gaudirun.py prodConf_DaVinci.py
+publisher:
+  publisher_type: 'fromglob-pub'
+  globexpression: '*.dst'
+  outputkey: dstfile
+environment:
+  environment_type: 'docker-encapsulated'
+  image: lukasheinrich/lhcbdev-derived
+  resources:
+    - CVMFS

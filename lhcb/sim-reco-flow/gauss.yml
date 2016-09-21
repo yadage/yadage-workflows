@@ -1,0 +1,20 @@
+process:
+  process_type: 'interpolated-script-cmd'
+  script: |
+    #!/bin/bash
+    python create_prodConf.py Run-I/input_step1.json {outputdir} prodConf_Gauss.py
+    export USER=`whoami`
+    source  /cvmfs/lhcb.cern.ch/lib/LbLogin.sh --no-userarea
+    lb-run --use AppConfig.v3r277 --use DecFiles.v29r5 --use ProdConf Gauss/v49r1 gaudirun.py prodConf_Gauss.py
+    #echo 'dummy.sim' > {outputdir}/file.sim
+
+publisher:
+  publisher_type: 'fromglob-pub'
+  globexpression: '*.sim'
+  outputkey: simfile
+
+environment:
+  environment_type: 'docker-encapsulated'
+  image: lukasheinrich/lhcbdev-derived
+  resources:
+    - CVMFS

@@ -1,0 +1,18 @@
+process:
+  process_type: 'interpolated-script-cmd'
+  script: |
+    #!/bin/bash
+    python create_prodConf.py Run-I/input_step5.json {outputdir} prodConf_Brunel.py {inputfile}
+    export USER=`whoami`
+    source  /cvmfs/lhcb.cern.ch/lib/LbLogin.sh --no-userarea
+    LbLogin -c x86_64-slc5-gcc46-opt 
+    lb-run --use "AppConfig v3r246" --use ProdConf Brunel v43r2p11 gaudirun.py prodConf_Brunel.py
+publisher:
+  publisher_type: 'fromglob-pub'
+  globexpression: '*.dst'
+  outputkey: dstfile
+environment:
+  environment_type: 'docker-encapsulated'
+  image: lukasheinrich/lhcbdev-derived
+  resources:
+    - CVMFS

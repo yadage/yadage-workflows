@@ -1,0 +1,18 @@
+process:
+  process_type: 'interpolated-script-cmd'
+  script: |
+    #!/bin/bash
+    python create_prodConf.py Run-I/input_step2.json {outputdir} prodConf_Boole.py {inputfile}
+    export USER=`whoami`
+    source  /cvmfs/lhcb.cern.ch/lib/LbLogin.sh --no-userarea
+    lb-run --use AppConfig.v3r266 --use ProdConf Boole v30r1 gaudirun.py prodConf_Boole.py
+    #echo "dummy	digi" >	{outputdir}/file.digi
+publisher:
+  publisher_type: 'fromglob-pub'
+  globexpression: '*.digi'
+  outputkey: digifile
+environment:
+  environment_type: 'docker-encapsulated'
+  image: lukasheinrich/lhcbdev-derived
+  resources:
+    - CVMFS

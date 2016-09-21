@@ -1,0 +1,49 @@
+stages:
+  - name: gauss
+    dependencies: []
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        outputdir: '{workdir}'
+      step: {$ref: 'gauss.yml#'}
+  - name: boole
+    dependencies: ['gauss']
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        outputdir: '{workdir}'
+        inputfile: {stages: gauss, output: simfile, unwrap: true}
+      step: {$ref: 'boole.yml#'}
+  - name: moorel0
+    dependencies: ['boole']
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        outputdir: '{workdir}'
+        inputfile: {stages: boole, output: digifile, unwrap: true}
+      step: {$ref: 'moorel0.yml#'}
+  - name: moore
+    dependencies: ['moorel0']
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        outputdir: '{workdir}'
+        inputfile: {stages: moorel0, output: digifile, unwrap: true}
+      step: {$ref: 'moore.yml#'}
+  - name: brunel
+    dependencies: ['moore']
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        outputdir: '{workdir}'
+        inputfile: {stages: moore, output: digifile, unwrap: true}
+      step: {$ref: 'brunel.yml#'}
+  - name: davinci
+    dependencies: ['brunel']
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        outputdir: '{workdir}'
+        inputfile: {stages: brunel, output: dstfile, unwrap: true}
+      step: {$ref: 'davinci.yml#'}
+
