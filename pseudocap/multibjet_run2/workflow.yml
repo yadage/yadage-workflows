@@ -1,0 +1,23 @@
+stages:
+  - name: selection
+    dependencies: ['init']
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        dataset: {stages: init, output: dataset, unwrap: true}
+        submitdir: '{workdir}/submitdir'
+        outputprefix: '{workdir}/histfitter.root'
+        did: {stages: init, output: did, unwrap: true}
+      step: {$ref: 'selscript.yml#'}
+  - name: fit
+    dependencies: ['selection']
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        bkgtree: 'root://eosuser.cern.ch///eos/project/r/recast/Bkg_2.4.15-2-0_merged.root'
+        datatree: 'root://eosuser.cern.ch///eos/project/r/recast/Data_2.4.15-2-0.root'
+        outputjson: '{workdir}/fitoutput.json'
+        selectionoutput: {stages: selection, output: histfitterfile, unwrap: true}
+        weightsfile: {stages: init, output: weightsfile, unwrap: true}
+        did: {stages: init, output: did, unwrap: true}
+      step: {$ref: 'fitscript.yml#'}

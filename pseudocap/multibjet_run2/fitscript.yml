@@ -1,0 +1,50 @@
+process:
+  process_type: 'interpolated-script-cmd'
+  script: |
+    #!/bin/bash
+    source ~/.bashrc
+    setupATLAS
+    lsetup "root 6.06.02-x86_64-slc6-gcc48-opt"
+    cd /code/multib/HistFitter
+    source ./setup.sh
+    cd analysis/analysis_multib
+    /recast_auth/getkrb.sh
+  
+  
+    cd input
+    cat << EOF > dummygrouping.json
+    {{
+    "{did}": "recastpoint_0_0"
+    }}
+    EOF
+
+    python mergeTrees.py {selectionoutput} --filters filters/filters_ht.json --weights {weightsfile} --did-to-group dummygrouping.json --include-dids {did}  --do-backward-compatibility --groups-sig recastpoint
+    cd ..
+
+    lumi="5807.51"
+    region="Gbb_A"
+    echo '["recastpoint_0_0"]' > point.json
+    cat point.json
+    export HF_MBJ_SIGNALJSON="point.json"
+    export HF_MBJ_BACKGROUNDFILE={bkgtree}
+    export HF_MBJ_DATAFILE={datatree}
+    export HF_MBJ_SIGNALFILE='input/Sig.root'
+    HistFitter.py -wtpf -F excl python/My3bGtt.py _signalRegion $region _lumi $lumi _unblind true _doHFSplitting false 2>&1 | tee fitlog.out
+    
+    resultfile=$(ls results/My3bGtt_*fixSigXSecNominal*_hypotest.root)
+    echo "result file is:  $resultfile"
+    root -b -q 'root2json.C("'"$resultfile"'","hypo_recastpoint_%f_%f")'
+
+    jsonfile=$(ls *harvest_list.json)
+    python recast_format.py $jsonfile {outputjson}
+
+publisher:
+  publisher_type: 'frompar-pub'
+  outputmap:
+    limitresult: outputjson
+environment:
+  environment_type: 'docker-encapsulated'
+  image: lukasheinrich/multibfit_cvmfs
+  resources:
+    - CVMFS
+    - GRIDProxy
