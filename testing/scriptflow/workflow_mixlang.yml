@@ -1,0 +1,46 @@
+stages:
+  - name: step_one
+    dependencies: []
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        outputfile: '{workdir}/out.txt'
+        parone: First
+        partwo: Second
+      step:
+          process:
+            process_type: 'interpolated-script-cmd'
+            script: |
+              echo Hello World
+              echo {parone} {partwo} | tee {outputfile}
+          publisher:
+            publisher_type: 'frompar-pub'
+            outputmap:
+              outputfile: outputfile
+          environment:
+            environment_type: 'docker-encapsulated'
+            image: busybox
+  - name: step_two
+    dependencies: ['step_one']
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        infile: {stages: step_one, output: outputfile, unwrap: true}
+        outputfile: '{workdir}/secondout.txt'
+      step:
+          process:
+            process_type: 'interpolated-script-cmd'
+            interpreter: python
+            script: |
+              print 'Hello from Python'
+              with open('{infile}') as input:
+                with open('{outputfile}','w') as  output:
+                  output.write(input.read().upper())
+          publisher:
+            publisher_type: 'frompar-pub'
+            outputmap:
+              outputfile: outputfile
+          environment:
+            environment_type: 'docker-encapsulated'
+            image: python
+            imagetag: '2.7'
