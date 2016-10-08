@@ -1,0 +1,29 @@
+stages:
+  - name: pythia
+    dependencies: ['init']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'steps.yml#/pythia'}
+      parameters:
+        settings_file: /analysis/mainPythiaMLM.cmnd
+        hepmcfile: '{workdir}/outputfile.hepmc'
+        lhefile: {stages: init, output: lhefile}
+
+  - name: delphes
+    dependencies: ['pythia']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'steps.yml#/delphes'}
+      parameters:
+        detector_card: /analysis/template_cards/modified_delphes_card_ATLAS.tcl
+        outputfile: '{workdir}/outputfile.root'
+        inputfile: {stages: pythia, output: hepmcfile}
+
+  - name: analysis
+    dependencies: ['delphes']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'steps.yml#/analysis'}
+      parameters:
+        fromdelphes: {stages: delphes, output: delphesoutput}
+        analysis_output: '{workdir}/anaout.root'
