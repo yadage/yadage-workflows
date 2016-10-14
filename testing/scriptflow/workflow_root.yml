@@ -30,8 +30,10 @@ stages:
       step:
           process:
             process_type: 'interpolated-script-cmd'
-            interpreter: sh -c "cat - > m.C && root -b -q m.C"
+            interpreter: "root -b"
             script: |
+              #include <iostream>
+              #include <fstream>
               {{
                 std::ifstream t("{infile}");
                 std::string str((std::istreambuf_iterator<char>(t)),
@@ -39,10 +41,11 @@ stages:
                 std::cout << str << std::endl;
                 TString tstring(str.c_str());
                 tstring.ToUpper();
+                TCanvas c1;
                 TH1F h("hist",tstring.Data(),100,-5,5);
                 h.FillRandom("gaus",5000);
                 h.Draw();
-                c1->SaveAs("{outputfile}");
+                c1.SaveAs("{outputfile}");
                 return 0;
               }}
           publisher:
