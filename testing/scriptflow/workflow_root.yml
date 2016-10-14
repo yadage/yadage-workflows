@@ -30,7 +30,7 @@ stages:
       step:
           process:
             process_type: 'interpolated-script-cmd'
-            interpreter: "root -b"
+            interpreter: root -b
             script: |
               #include <iostream>
               #include <fstream>
