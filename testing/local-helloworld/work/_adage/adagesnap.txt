@@ -1,0 +1,9 @@
+========== ADAGE LOG BEGIN at 2016-10-22T18:15:00.409696 ==========
+---------- snapshot at 2016-10-22T18:15:00.409782
+---------- snapshot at 2016-10-22T18:15:00.459827
+name: init obj: <YadageNode init SUCCESS lifetime: 0.0478930473328 (id: 8c4d4cb4-1054-4461-a504-ce5e898d2adf) has result: True> submitted: True
+name: hello_world obj: <YadageNode hello_world DEFINED lifetime: 0.00475907325745 (id: 3cdf9b41-abf4-471a-bf60-6496f38735e2) has result: True> submitted: False
+---------- snapshot at 2016-10-22T18:15:02.478166
+name: init obj: <YadageNode init SUCCESS lifetime: 2.06627583504 (id: 8c4d4cb4-1054-4461-a504-ce5e898d2adf) has result: True> submitted: True
+name: hello_world obj: <YadageNode hello_world SUCCESS lifetime: 2.02284502983 (id: 3cdf9b41-abf4-471a-bf60-6496f38735e2) has result: True> submitted: True
+========== ADAGE LOG END at 2016-10-22T18:15:02.478450 ==========
