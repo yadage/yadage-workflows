@@ -1,0 +1,40 @@
+firsttrf:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: 'sleep $(echo $RANDOM % 20|bc); echo ./transform {input} {output}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      output: output
+  environment:
+    environment_type: localproc-env
+secondtrf:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: 'sleep $(echo $RANDOM % 20|bc); echo ./transform {input} {output}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      output: output
+  environment:
+    environment_type: localproc-env
+thirdtrf:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: 'sleep $(echo $RANDOM % 20|bc); echo ./transform {input} {output}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      output: output
+  environment:
+    environment_type: localproc-env
+merge:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: 'echo {inputfiles} {mergedfile}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      output: mergedfile
+  environment:
+    environment_type: localproc-env

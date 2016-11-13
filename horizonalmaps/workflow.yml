@@ -1,0 +1,42 @@
+stages:
+  - name: first
+    dependencies: ['init']
+    scheduler:
+      scheduler_type: multistep-stage
+      parameters:
+        input: {stages: init, output: array, unwrap: true}
+        output: '{workdir}/out'
+      step: {$ref: 'steps.yml#/firsttrf'}
+      scatter:
+        method: zip
+        parameters: ['input']
+  - name: second
+    dependencies: ['first']
+    scheduler:
+      scheduler_type: multistep-stage
+      parameters:
+        input: {stages: first, output: output}
+        output: '{workdir}/out2'
+      step: {$ref: 'steps.yml#/secondtrf'}
+      scatter:
+        method: zip
+        parameters: ['input']
+  - name: third
+    dependencies: ['second']
+    scheduler:
+      scheduler_type: multistep-stage
+      parameters:
+        input: {stages: second, output: output}
+        output: '{workdir}/out2'
+      step: {$ref: 'steps.yml#/thirdtrf'}
+      scatter:
+        method: zip
+        parameters: ['input']
+  - name: final
+    dependencies: ['third']
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        inputfiles: {stages: third, output: output}
+        mergedfile: '{workdir}/merged'
+      step: {$ref: 'steps.yml#/merge'}
