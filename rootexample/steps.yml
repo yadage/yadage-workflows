@@ -1,7 +1,8 @@
 gendata:
   process:
-    process_type: 'string-interpolated-cmd'
-    cmd: root -b -q '"'"'gendata.C({events},"{outfilename}")'"'"'
+    process_type: 'interpolated-script-cmd'
+    script: |
+      root -b -q 'gendata.C({events},"{outfilename}")'
   publisher:
     publisher_type: 'frompar-pub'
     outputmap:
@@ -12,8 +13,9 @@ gendata:
 
 fitdata:
   process:
-    process_type: 'string-interpolated-cmd'
-    cmd: root -b -q '"'"'fitdata.C("{data}","{outfile}")'"'"'
+    process_type: 'interpolated-script-cmd'
+    script: |
+      root -b -q 'fitdata.C("{data}","{outfile}")'
   publisher:
     publisher_type: 'frompar-pub'
     outputmap:
@@ -21,5 +23,3 @@ fitdata:
   environment:
     environment_type: 'docker-encapsulated'
     image: atrisovic/rootexample
-
- 
