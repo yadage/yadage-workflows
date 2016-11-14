@@ -1,8 +1,7 @@
 gendata:
   process:
     process_type: 'interpolated-script-cmd'
-    script: |
-      root -b -q 'gendata.C({events},"{outfilename}")'
+    script: root -b -q 'gendata.C({events},"{outfilename}")'
   publisher:
     publisher_type: 'frompar-pub'
     outputmap:
@@ -14,8 +13,7 @@ gendata:
 fitdata:
   process:
     process_type: 'interpolated-script-cmd'
-    script: |
-      root -b -q 'fitdata.C("{data}","{outfile}")'
+    script: root -b -q 'fitdata.C("{data}","{outfile}")'
   publisher:
     publisher_type: 'frompar-pub'
     outputmap:
