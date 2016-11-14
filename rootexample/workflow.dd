@@ -1,0 +1,6 @@
+gendata:
+  - atrisovic/rootexample: root -b -q 'gendata.C({events},"{outfilename:>>}")'
+  - {events: $init|events,  outfilename: '{workdir}/data.root'}
+fitdata:
+  - atrisovic/rootexample: root -b -q 'fitdata.C("{data}","{outfile:>>}")'
+  - {data: $gendata|outfilename,  outfile: '{workdir}/work.png'}
