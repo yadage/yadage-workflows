@@ -1,0 +1,31 @@
+stages:
+  - name: gridflow
+    dependencies: ['init']
+    scheduler:
+      scheduler_type: singlestep-stage
+      workflow: {$ref: 'justgrid.yml'}
+      parameters:
+        kHzz: {stages: init, output: kHzz, unwrap: true}
+        kAzz: {stages: init, output: kAzz, unwrap: true}
+        kHww: {stages: init, output: kHww, unwrap: true}
+        kAww: {stages: init, output: kAww, unwrap: true}
+  - name: subchain
+    dependencies: ['gridflow']
+    scheduler:
+      scheduler_type: multistep-stage
+      workflow: {$ref: 'subchain-combined.yml'}
+      parameters:
+        gridpack: {stages: 'gridflow.[*].grid', output: gridpack, unwrap: true}
+        nevents: {stages: init, output: nevents, unwrap: true}
+        seed: {stages: init, output: seeds, flatten: true}
+      scatter:
+        method: zip
+        parameters: ['seed']
+  - name: rootmerge
+    dependencies: ['subchain']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'steps.yml#/rootmerge'}
+      parameters:
+        mergedfile: '{workdir}/anamerged.root'
+        inputfiles: {stages: 'subchain.[*].analysis', output: analysis_output}
