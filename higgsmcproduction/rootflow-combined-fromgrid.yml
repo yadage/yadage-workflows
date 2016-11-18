@@ -1,0 +1,22 @@
+stages:
+  - name: subchain
+    dependencies: ['init']
+    scheduler:
+      scheduler_type: multistep-stage
+      workflow: {$ref: 'subchain-combined.yml'}
+      parameters:
+        gridpack: {stages: init, output: gridpack, unwrap: true}
+        nevents: {stages: init, output: nevents, unwrap: true}
+        seed: {stages: init, output: seeds, flatten: true}
+      scatter:
+        method: zip
+        parameters: ['seed']
+
+  - name: rootmerge
+    dependencies: ['subchain']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'steps.yml#/rootmerge'}
+      parameters:
+        mergedfile: '{workdir}/anamerged.root'
+        inputfiles: {stages: 'subchain.[*].analysis', output: analysis_output}
