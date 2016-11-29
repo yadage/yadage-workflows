@@ -1,0 +1,26 @@
+stages:
+  - name: snakemake_allinone
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        workdir: '{workdir}'
+        configfile: config/testconfig.yml
+      step:
+        process:
+          process_type: interpolated-script-cmd
+          interpreter: /bin/bash
+          script: |
+            export CI_WORKDIR={workdir}
+            /recast_auth/getkrb.sh
+            cd Lb2LcD0K
+            source activate snake
+            snakemake --configfile {configfile}
+        publisher:
+          publisher_type: fromglob-pub
+          outputkey: plots
+          globexpression: '*.pdf'
+        environment:
+          environment_type: docker-encapsulated
+          image: gitlab-registry.cern.ch/lhcb-bandq-exotics/lb2lcd0k
+          resources:
+            - KRB5Auth
