@@ -11,7 +11,7 @@ acquire:
 mapstep:
   process:
     process_type: string-interpolated-cmd
-    cmd: 'cat {inputfile} | tr "[:lower:]" "[:upper:]" > {outputfile}'
+    cmd: 'date > {outputfile}; cat  {inputfile} | tr "[:lower:]" "[:upper:]" >> {outputfile};'
   environment:
     environment_type: 'localproc-env'
   publisher:
