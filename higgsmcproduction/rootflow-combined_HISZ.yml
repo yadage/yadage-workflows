@@ -1,0 +1,14 @@
+stages:
+  - name: prepare
+    dependencies: ['init']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'steps_HISZ.yml#/prepare'}
+      parameters:
+        FWW: {stages: init, output: FWW}
+        FW: {stages: init, output: FW}
+        param_card: '{workdir}/param.dat'
+
+  - {$ref: rootflow-combined.yml#/stages/1}
+  - {$ref: rootflow-combined.yml#/stages/2}
+  - {$ref: rootflow-combined.yml#/stages/3}

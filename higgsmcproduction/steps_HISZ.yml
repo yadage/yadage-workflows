@@ -1,0 +1,11 @@
+prepare:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: './paramfromtemplate.py inputs/template_paramcard_HISZ.dat {param_card} -i "{{FW: {FW}, FWW: {FWW} }}"'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      param_card: param_card
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: 'lukasheinrich/higgs-mc-studies'
