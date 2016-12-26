@@ -5,10 +5,37 @@ stages:
       scheduler_type: singlestep-stage
       step: {$ref: 'steps_HISZ.yml#/prepare'}
       parameters:
-        FWW: {stages: init, output: FWW}
         FW: {stages: init, output: FW}
+        FWW: {stages: init, output: FWW}
         param_card: '{workdir}/param.dat'
 
-  - {$ref: rootflow-combined.yml#/stages/1}
-  - {$ref: rootflow-combined.yml#/stages/2}
-  - {$ref: rootflow-combined.yml#/stages/3}
+  - name: grid
+    dependencies: ['prepare']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'steps_HISZ.yml#/grid'}
+      parameters:
+        param_card: {stages: prepare, output: param_card}
+        gridpack: '{workdir}/grid.tar.gz'
+
+  - name: subchain
+    dependencies: ['grid']
+    scheduler:
+      scheduler_type: multistep-stage
+      workflow: {$ref: 'subchain-combined_HISZ.yml'}
+      parameters:
+        gridpack: {stages: grid, output: gridpack, unwrap: true}
+        nevents: {stages: init, output: nevents, unwrap: true}
+        seed: {stages: init, output: seeds, flatten: true}
+      scatter:
+        method: zip
+        parameters: ['seed']
+
+  - name: rootmerge
+    dependencies: ['subchain']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'steps_HISZ.yml#/rootmerge'}
+      parameters:
+        mergedfile: '{workdir}/anamerged.root'
+        inputfiles: {stages: 'subchain.[*].analysis', output: analysis_output}
