@@ -1,11 +1,106 @@
+imgtobeused: &tmpimg
+  imagetag: 'HISZ_UFO'
+
 prepare:
   process:
     process_type: 'string-interpolated-cmd'
-    cmd: './paramfromtemplate.py inputs/template_paramcard_HISZ.dat {param_card} -i "{{FW: {FW}, FWW: {FWW} }}"'
+    cmd: './paramfromtemplate.py inputs/template_paramcard.dat {param_card}  -i "{{FW: {FW}, FWW: {FWW}}}"'
   publisher:
     publisher_type: 'frompar-pub'
     outputmap:
       param_card: param_card
+  environment: 
+    <<: *tmpimg
+    environment_type: 'docker-encapsulated'
+    image: 'lukasheinrich/higgs-mc-studies'
+
+grid:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: './scripts/setupgrid.sh {param_card} {gridpack}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      gridpack: gridpack
   environment:
+    <<: *tmpimg
+    environment_type: 'docker-encapsulated'
+    image: 'lukasheinrich/higgs-mc-studies'
+
+madgraph:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: './scripts/rungrid.sh {gridpack} {nevents} {seed} {lhefile}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      lhefile: lhefile
+  environment:
+    <<: *tmpimg
+    environment_type: 'docker-encapsulated'
+    image: 'lukasheinrich/higgs-mc-studies'
+
+pythia:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: '/analysis/pythia_main/example_main {settings_file} {hepmcfile} {lhefile}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      hepmcfile: hepmcfile
+  environment:
+    <<: *tmpimg
+    environment_type: 'docker-encapsulated'
+    image: 'lukasheinrich/higgs-mc-studies'
+
+delphes:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: 'DelphesHepMC {detector_card} {outputfile} {inputfile}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      delphesoutput: outputfile
+  environment:
+    <<: *tmpimg
+    environment_type: 'docker-encapsulated'
+    image: 'lukasheinrich/higgs-mc-studies'
+
+pythia_delphes:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: './combined_pythia_delphes.py {lhefile} {pythia_settings_file} {delphes_detector_card}  {output_rootfile}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      delphesoutput: output_rootfile
+  environment:
+    <<: *tmpimg
+    environment_type: 'docker-encapsulated'
+    image: 'lukasheinrich/higgs-mc-studies'
+
+analysis:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: './scripts/runpost.sh {fromdelphes} {analysis_output}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      analysis_output: analysis_output
+  environment:
+    <<: *tmpimg
+    environment_type: 'docker-encapsulated'
+    image: 'lukasheinrich/higgs-mc-studies'
+
+rootmerge:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: 'hadd {mergedfile} {inputfiles}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      mergedfile: mergedfile
+  environment:
+    <<: *tmpimg
     environment_type: 'docker-encapsulated'
     image: 'lukasheinrich/higgs-mc-studies'
