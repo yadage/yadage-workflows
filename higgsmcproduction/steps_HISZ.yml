@@ -4,7 +4,7 @@ imgtobeused: &tmpimg
 prepare:
   process:
     process_type: 'string-interpolated-cmd'
-    cmd: './paramfromtemplate.py inputs/template_paramcard.dat {param_card}  -i "{{FW: {FW}, FWW: {FWW}}}"'
+    cmd: './paramfromtemplate.py inputs/template_paramcard_HISZ.dat {param_card}  -i "{{FW: {FW}, FWW: {FWW}}}"'
   publisher:
     publisher_type: 'frompar-pub'
     outputmap:
