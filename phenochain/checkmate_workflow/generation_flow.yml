@@ -1,0 +1,30 @@
+stages:
+  - name: prepslha
+    dependencies: ['init']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'steps.yml#/prepare_slha'}
+      parameters:
+        template: /templates/slha_template.slha
+        stop_mass: {stages: init, output: stop_mass, unwrap: true}
+        neutralino_mass: {stages: init, output: neutralino_mass, unwrap: true}
+        outputSLHA: '{workdir}/spectrum.slha'
+  - name: herwig
+    dependencies: ['prepslha']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'steps.yml#/herwig'}
+      parameters:
+        slhafile: {stages: prepslha, output: outputSLHA, unwrap: true}
+        events: {stages: init, output: events, unwrap: true}
+        seed: 1234
+        hepmcfile: '{workdir}/out.hepmc'
+        herwigruncard: '{workdir}/runcard.dat'
+  - name: compute_xsec
+    dependencies: ['init']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'steps.yml#/compute_xsec'}
+      parameters:
+        stop_mass: {stages: init, output: stop_mass, unwrap: true}
+        xsecfile: '{workdir}/xsec.json'
