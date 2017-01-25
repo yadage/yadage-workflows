@@ -1,14 +1,21 @@
 process:
-  process_type: 'string-interpolated-cmd'
-  cmd: '/resources/download.py {dataset} {outDir} {outList}'
+  process_type: 'interpolated-script-cmd'
+  interpreter: bash
+  script: |
+    source ~/.bashrc
+    setupATLAS
+    /recast_auth/getmyproxy.sh
+    lsetup rucio
+    mkdir {outDir}
+    rucio download --dir {outDir} {dataset}
+    find {outDir} -type f > {outList}    
 publisher:
   publisher_type: 'frompar-pub'
   outputmap:
     output: outList
 environment:
   environment_type: 'docker-encapsulated'
-  envscript: /resources/downloadenv.sh
-  image: lukasheinrich/dilepton_download
+  image: lukasheinrich/recast_cvmfs_assisted
   resources:
     - CVMFS
     - GRIDProxy
