@@ -9,6 +9,7 @@ process:
     mkdir {outDir}
     rucio download --dir {outDir} {dataset}
     find {outDir} -type f > {outList}    
+    test -s {outList}
 publisher:
   publisher_type: 'frompar-pub'
   outputmap:
