@@ -1,0 +1,21 @@
+stages:
+  - name: test
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        inputfile: {stages: init, output: somefile, unwrap: true}
+        outputfile: '{workdir}/world.txt' 
+      step:
+        process:
+          process_type: string-interpolated-cmd
+          cmd: 'cat {inputfile} > {outputfile}'
+        environment:
+          environment_type: docker-encapsulated
+          image: busybox
+        publisher:
+          publisher_type: interpolated-pub
+          publish:
+            out: '{outputfile}'
+            some:
+              deep:
+                '{inputfile}'

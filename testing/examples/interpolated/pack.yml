@@ -1,0 +1,13 @@
+process:
+  process_type: string-interpolated-cmd
+  cmd: 'cat {inputfile} > {outputfile}'
+environment:
+  environment_type: docker-encapsulated
+  image: busybox
+publisher:
+  publisher_type: frompar-pub
+  outputmap:
+    out: outputfile
+    some:
+      deep:
+        inputfile
