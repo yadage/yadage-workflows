@@ -1,0 +1,10 @@
+stages:
+  - name: rivet
+    dependencies: [init]
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: steps.yml#/rivet}
+      parameters:
+        hepmcfiles: {stages: init, output: hepmcfiles, unwrap: true}
+        yodafile: '{workdir}/output.yoda'
+        analysis: {stages: init, output: analysis, unwrap: true}

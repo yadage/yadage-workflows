@@ -1,0 +1,49 @@
+sherpa:
+  process:
+    process_type: string-interpolated-cmd
+    cmd: |
+      Sherpa -f {runcard} EVENTS=={nevents} -R {seed} -A {yodaprefix}
+      mv OUTFILE.hepmc2g {outputfile}
+  environment:
+    environment_type: docker-encapsulated
+    image: iamholger/sherparivet
+    imagetag: '0.1'
+  publisher:
+    publisher_type: interpolated-pub
+    publish:
+      yodafile: '{workdir}/{yodaprefix}.yoda'
+      hepmcfile: '{outputfile}'
+
+extract_xsec:
+  process:
+    process_type: interpolated-script-cmd
+    interpreter: python
+    script: |
+      import yoda
+      import json
+      value = yoda.readYODA('{yodafile}')['/_XSEC'].point(0).x
+      json.dump({{
+        'xsec': value,
+        'unit': 'pb'
+      }},open('{xsecfile}','w'))    
+  environment:
+    environment_type: docker-encapsulated
+    image: iamholger/sherparivet
+    imagetag: '0.1'
+  publisher:
+    publisher_type: frompar-pub
+    outputmap:
+      xsecfile: xsecfile
+
+rivet:
+  process:
+    process_type: string-interpolated-cmd
+    cmd: 'rivet -o {yodafile} -a {analysis} {hepmcfiles}'   
+  environment:
+    environment_type: docker-encapsulated
+    image: iamholger/sherparivet
+    imagetag: '0.1'
+  publisher:
+    publisher_type: frompar-pub
+    outputmap:
+      yodafile: yodafile
