@@ -2,7 +2,6 @@ process:
   process_type: 'interpolated-script-cmd'
   script: |
     #!/bin/bash
-    echo "Hello"
     source ~/.bashrc
     setupATLAS
     source ./rcSetup.sh
