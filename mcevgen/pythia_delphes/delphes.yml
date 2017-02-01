@@ -1,0 +1,11 @@
+process:
+  process_type: 'string-interpolated-cmd'
+  cmd: 'DelphesHepMC  {delphes_card} {outputroot} {inputhepmc} && root2lhco {outputroot} {outputlhco}'
+publisher:
+  publisher_type: 'frompar-pub'
+  outputmap:
+    lhcofile: outputlhco
+    rootfile: outputroot
+environment:
+  environment_type: 'docker-encapsulated'
+  image: lukasheinrich/root-delphes

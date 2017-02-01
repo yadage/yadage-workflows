@@ -1,0 +1,27 @@
+stages:
+  - name: pythia
+    dependencies: [init]
+    scheduler:
+      scheduler_type: multistep-stage
+      step: {$ref: 'pythia.yml'}
+      parameters:
+        events: {stages: init, output: events_per_file, unwrap: true}
+        lhefile: {stages: init, output: lhefiles, unwrap: true}
+        outputhepmc: '{workdir}/out.hepmc'
+      scatter:
+        parameters: [lhefile]
+        method: zip
+  - name: delphes
+    dependencies: [pythia]
+    scheduler:
+      scheduler_type: multistep-stage
+      step: {$ref: 'delphes.yml'}
+      parameters:
+        events: -1
+        inputhepmc: {stages: pythia, output: hepmcfile}
+        delphes_card: 'delphes/cards/delphes_card_ATLAS.tcl'
+        outputlhco: '{workdir}/out.lhco'
+        outputroot: '{workdir}/out.root'
+      scatter:
+        parameters: [inputhepmc]
+        method: zip
