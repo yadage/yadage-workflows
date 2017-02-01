@@ -1,0 +1,34 @@
+stages:
+  - name: analysis
+    dependencies: [init]
+    scheduler:
+      scheduler_type: multistep-stage
+      parameters:
+        inputfile: {stages: init, output: rootfiles, unwrap: true}
+        outfile: '{workdir}/histos.root'
+      step: {$ref: analysissteps.yml#/analysis}
+      scatter:
+        parameters: [inputfile]
+        method: zip
+
+  - name: merge
+    dependencies: [analysis]
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        inputfiles: {stages: analysis, output: outfile, unwrap: true}
+        mergedfile: '{workdir}/histos.root'
+        xsecval: {stages: init, output: xsection.value, unwrap: true}
+        xsecunit: {stages: init, output: xsection.unit, unwrap: true}
+      step: {$ref: analysissteps.yml#/merge}
+
+  - name: fit
+    dependencies: [merge]
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        storedbgdata: {stages: init, output: bgdata, unwrap: true}
+        obsdata: {stages: init, output: obsdata, unwrap: true}
+        fitinput: {stages: merge, output: mergedfile, unwrap: true}
+        fitresult: '{workdir}/fitresult.json'
+      step: {$ref: analysissteps.yml#/fit}

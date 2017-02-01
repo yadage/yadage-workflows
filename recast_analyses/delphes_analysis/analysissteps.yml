@@ -1,0 +1,54 @@
+standard_environment: &env
+    environment_type: docker-encapsulated
+    image: lukasheinrich/cern-root
+
+analysis:
+  process:
+    process_type: interpolated-script-cmd
+    interpreter: bash
+    script: |
+      source /usr/local/bin/thisroot.sh
+      cat << EOF | python
+      import ROOT
+      f = ROOT.TFile.Open('{inputfile}')
+      c = ROOT.TCanvas()
+      tree = f.Get('Delphes;1')
+      histfile = ROOT.TFile.Open('{outfile}','recreate')
+      histo = ROOT.TH1F('electron','electron histo',100,0,100)
+      tree.Draw('Electron.PT>>electron')
+      histfile.Write()
+      EOF
+  environment: *env
+  publisher:
+    publisher_type: frompar-pub
+    outputmap:
+      outfile: outfile
+
+merge:
+  process:
+    process_type: interpolated-script-cmd
+    interpreter: bash
+    script: |
+      source /usr/local/bin/thisroot.sh
+      hadd {mergedfile} {inputfiles}
+  environment: *env
+  publisher:
+    publisher_type: frompar-pub
+    outputmap:
+      mergedfile: mergedfile
+
+fit:
+  process:
+    process_type: interpolated-script-cmd
+    interpreter: bash
+    script: |
+      source /usr/local/bin/thisroot.sh
+      cat << EOF | python
+      import ROOT
+      EOF
+      echo some fit > {fitresult}
+  environment: *env
+  publisher:
+    publisher_type: frompar-pub
+    outputmap:
+      fitresult: fitresult
