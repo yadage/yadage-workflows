@@ -1,0 +1,26 @@
+stages:
+  - name: production
+    scheduler:
+      scheduler_type: multistep-stage
+      parameters:
+        nevents: {stages: init, output: nevents, unwrap: true}
+      workflow: {$ref: 'madgraph_delphes.yml'}
+      scatter:
+        parameters: [nevents]
+        method: zip
+  - name: merge
+    dependencies: [production]
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        outputfile: '{workdir}/merged.root'
+        inputfiles: {stages: 'production.[*].delphes', output: rootfile}
+      step:
+        process:
+          process_type: string-interpolated-cmd
+          cmd: hadd {outputfile} {inputfiles}
+        environment: {$ref: 'delphes.yml#/environment'}
+        publisher:
+          publisher_type: frompar-pub
+          outputmap:
+            merged: outputfile
