@@ -18,8 +18,7 @@ stages:
       parameters:
         inputfiles: {stages: analysis, output: outfile, unwrap: true}
         mergedfile: '{workdir}/histos.root'
-        xsecval: {stages: init, output: xsection.value, unwrap: true}
-        xsecunit: {stages: init, output: xsection.unit, unwrap: true}
+        xsec_in_pb: {stages: init, output: xsec_in_pb, unwrap: true}
       step: {$ref: analysissteps.yml#/merge}
 
   - name: fit
