@@ -1,0 +1,33 @@
+analysis_env: &analysis_env
+  environment_type: docker-encapsulated
+  image: lukasheinrich/gitlab-codecapture-demo
+  resources:
+    - CVMFS
+
+extract:
+  process:
+    process_type: interpolated-script-cmd
+    interpreter: bash
+    script: |
+      source ~/.bashrc
+      source rcSetup.sh
+      simple_analysis {histofile} {daodfiles}
+  environment: *analysis_env
+  publisher:
+    publisher_type: frompar-pub
+    outputmap:
+      histofile: histofile
+  
+plotdaod:
+  process:
+    process_type: interpolated-script-cmd
+    interpreter: bash
+    script: |
+      source ~/.bashrc
+      source rcSetup.sh
+      python docker-reg-test/plot.py {plotfile} {histofile}        
+  environment: *analysis_env
+  publisher:
+    publisher_type: frompar-pub
+    outputmap:
+      plotfile: plotfile
