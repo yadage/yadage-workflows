@@ -32,8 +32,8 @@ stages:
       scheduler_type: singlestep-stage
       parameters:
         baserelease: '20.7.0'
-        trfrelease: 'AtlasProduction,19.2.3.5'
-        amitag: s2586
+        trfrelease: {stages: init, output: "trfconfigs.sim.rel", unwrap: true}
+        amitag: {stages: init, output: "trfconfigs.sim.amitag", unwrap: true}
         evntfile: {stages: download_evnt, output: downloaded_files, unwrap: true}
         nevents: 1
         hitsfile: '{workdir}/events.HITS.root'
@@ -45,8 +45,8 @@ stages:
       scheduler_type: singlestep-stage
       parameters:
         baserelease: '20.7.0'
-        trfrelease: '20.7.5.1.1'
-        amitag: r7772
+        trfrelease: {stages: init, output: "trfconfigs.reco.rel", unwrap: true}
+        amitag: {stages: init, output: "trfconfigs.reco.amitag", unwrap: true}
         nevents: 1
         hitsfile: {stages: simulation, output: hitsfile, unwrap: true}
         highptfile: {stages: download_pu_hi, output: downloaded_files, unwrap: true}
