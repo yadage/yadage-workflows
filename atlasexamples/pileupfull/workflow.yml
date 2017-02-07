@@ -1,4 +1,13 @@
 stages:
+  - name: download_evnt
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        workdir: '{workdir}'
+        dataset: 'user.ctreado.mc15_13TeV.999033.Pythia8_CT10_AZNLOCTEQ6L1_EJ_ModelB_1400_20_v1.EVNT.e3871'
+        nrandomfiles: 1
+      step: {$ref: 'steps.yml#/download_nrandom'}
+
   - name: download_pu_low
     scheduler:
       scheduler_type: singlestep-stage
@@ -18,13 +27,14 @@ stages:
       step: {$ref: 'steps.yml#/download_nrandom'}
 
   - name: simulation
+    dependencies: [download_evnt]
     scheduler:
       scheduler_type: singlestep-stage
       parameters:
         baserelease: '20.7.0'
         trfrelease: 'AtlasProduction,19.2.3.5'
         amitag: s2586
-        evntfile: 'some.EVNT.file.root'
+        evntfile: {stages: download_evnt, output: downloaded_files, unwrap: true}
         nevents: 1
         hitsfile: '{workdir}/events.HITS.root'
       step: {$ref: 'steps.yml#/simulation'}

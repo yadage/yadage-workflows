@@ -16,11 +16,7 @@ download_nrandom:
       /recast_auth/getmyproxy.sh
       lsetup rucio
       mkdir {workdir}/download
-      echo rucio download --nrandom {nrandomfiles} {dataset} --dir {workdir}/download
-      mkdir {workdir}/download/{dataset}
-      for x in `seq 1 {nrandomfiles}`;do
-        touch {workdir}/download/{dataset}/test"$x".root
-      done
+      rucio download --nrandom {nrandomfiles} {dataset} --dir {workdir}/download
   publisher:
     publisher_type: fromglob-pub
     outputkey: downloaded_files
