@@ -1,0 +1,45 @@
+stages:
+  - name: download_pu_low
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        workdir: '{workdir}'
+        dataset: 'mc15_13TeV.361034.Pythia8EvtGen_A2MSTW2008LO_minbias_inelastic_low.merge.HITS.e3581_s2578_s2195'
+        nrandomfiles: 1
+      step: {$ref: 'steps.yml#/download_nrandom'}
+
+  - name: download_pu_hi
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        workdir: '{workdir}'
+        dataset: 'mc15_13TeV.361035.Pythia8EvtGen_A2MSTW2008LO_minbias_inelastic_high.merge.HITS.e3581_s2578_s2195'
+        nrandomfiles: 1
+      step: {$ref: 'steps.yml#/download_nrandom'}
+
+  - name: simulation
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        baserelease: '20.7.0'
+        trfrelease: 'AtlasProduction,19.2.3.5'
+        amitag: s2586
+        evntfile: 'some.EVNT.file.root'
+        nevents: 1
+        hitsfile: '{workdir}/events.HITS.root'
+      step: {$ref: 'steps.yml#/simulation'}
+
+  - name: reconstruction
+    dependencies: [download_pu_low,download_pu_hi,simulation]
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        baserelease: '20.7.0'
+        trfrelease: '20.7.5.1.1'
+        amitag: r7772
+        nevents: 1
+        hitsfile: {stages: simulation, output: hitsfile, unwrap: true}
+        highptfile: {stages: download_pu_hi, output: downloaded_files, unwrap: true}
+        lowptfile: {stages: download_pu_low, output: downloaded_files, unwrap: true}
+        aodfile: '{workdir}/events.AOD.root'
+      step: {$ref: 'steps.yml#/reconstruction'}

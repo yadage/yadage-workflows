@@ -1,7 +1,7 @@
 firsttrf:
   process:
     process_type: 'string-interpolated-cmd'
-    cmd: 'sleep $(echo $RANDOM % 20|bc); echo ./transform {input} {output}'
+    cmd: 'sleep $(echo $RANDOM % 10|bc); echo ./transform {input} {output}'
   publisher:
     publisher_type: 'frompar-pub'
     outputmap:
@@ -11,7 +11,7 @@ firsttrf:
 secondtrf:
   process:
     process_type: 'string-interpolated-cmd'
-    cmd: 'sleep $(echo $RANDOM % 20|bc); echo ./transform {input} {output}'
+    cmd: 'sleep $(echo $RANDOM % 10|bc); echo ./transform {input} {output}'
   publisher:
     publisher_type: 'frompar-pub'
     outputmap:
@@ -21,7 +21,7 @@ secondtrf:
 thirdtrf:
   process:
     process_type: 'string-interpolated-cmd'
-    cmd: 'sleep $(echo $RANDOM % 20|bc); echo ./transform {input} {output}'
+    cmd: 'sleep $(echo $RANDOM % 10|bc); echo ./transform {input} {output}'
   publisher:
     publisher_type: 'frompar-pub'
     outputmap:

@@ -1,0 +1,72 @@
+common_env: &common_env
+    environment_type: 'docker-encapsulated'
+    image: lukasheinrich/recast_cvmfs_assisted
+    resources: []
+      # - CVMFS
+      # - GRIDProxy
+
+
+download_nrandom:
+  environment: *common_env
+  process:
+    process_type: interpolated-script-cmd
+    interpreter: bash
+    script: |
+      source ~/.bashrc
+      /recast_auth/getmyproxy.sh
+      lsetup rucio
+      mkdir {workdir}/download
+      echo rucio download --nrandom {nrandomfiles} {dataset} --dir {workdir}/download
+      mkdir {workdir}/download/{dataset}
+      for x in `seq 1 {nrandomfiles}`;do
+        touch {workdir}/download/{dataset}/test"$x".root
+      done
+  publisher:
+    publisher_type: fromglob-pub
+    outputkey: downloaded_files
+    globexpression: 'download/**/*.root*'
+    
+simulation:
+  environment: *common_env
+  process:
+    process_type: interpolated-script-cmd
+    interpreter: bash
+    script: |
+      source ~/.bashrc
+      /recast_auth/getmyproxy.sh
+      asetup {baserelease}
+      # echo Sim_tf.py \
+      # --asetup {trfrelease} \
+      # --AMI {amitag} \
+      # --inputEVNTFile {evntfile} \
+      # --outputHITSFile {hitsfile} \
+      # --maxEvents {nevents}
+      # touch {hitsfile}
+  publisher:
+    publisher_type: frompar-pub
+    outputmap:
+      hitsfile: hitsfile
+
+reconstruction:
+  environment: *common_env
+  process:
+    process_type: interpolated-script-cmd
+    interpreter: bash
+    script: |
+      source ~/.bashrc
+      /recast_auth/getmyproxy.sh
+      asetup {baserelease}
+      # echo Reco_tf.py \
+      # --asetup {trfrelease} \
+      # --AMI {amitag} \
+      # --inputHitsFile {hitsfile} \
+      # --outputAODFile {aodfile} \
+      # --jobNumber=1 \
+      # --maxEvents={nevents} \
+      # --inputHighPtMinbiasHitsFile {highptfile} \
+      # --inputLowPtMinbiasHitsFile {lowptfile} \
+      # touch {aodfile}
+  publisher:
+    publisher_type: frompar-pub
+    outputmap:
+      aodfile: aodfile
