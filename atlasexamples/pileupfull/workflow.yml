@@ -5,7 +5,7 @@ stages:
       parameters:
         workdir: '{workdir}'
         dataset: 'user.ctreado.mc15_13TeV.999033.Pythia8_CT10_AZNLOCTEQ6L1_EJ_ModelB_1400_20_v1.EVNT.e3871'
-        nrandomfiles: 1
+        nrandomfiles: {stages: init, output: nfiles, unwrap: true}
       step: {$ref: 'steps.yml#/download_nrandom'}
 
   - name: download_pu_low
@@ -14,7 +14,7 @@ stages:
       parameters:
         workdir: '{workdir}'
         dataset: 'mc15_13TeV.361034.Pythia8EvtGen_A2MSTW2008LO_minbias_inelastic_low.merge.HITS.e3581_s2578_s2195'
-        nrandomfiles: 1
+        nrandomfiles: {stages: init, output: nfiles, unwrap: true}
       step: {$ref: 'steps.yml#/download_nrandom'}
 
   - name: download_pu_hi
@@ -23,13 +23,13 @@ stages:
       parameters:
         workdir: '{workdir}'
         dataset: 'mc15_13TeV.361035.Pythia8EvtGen_A2MSTW2008LO_minbias_inelastic_high.merge.HITS.e3581_s2578_s2195'
-        nrandomfiles: 1
+        nrandomfiles: {stages: init, output: nfiles, unwrap: true}
       step: {$ref: 'steps.yml#/download_nrandom'}
 
   - name: simulation
     dependencies: [download_evnt]
     scheduler:
-      scheduler_type: singlestep-stage
+      scheduler_type: multistep-stage
       parameters:
         baserelease: '20.7.0'
         trfrelease: {stages: init, output: "trfconfigs.sim.rel", unwrap: true}
@@ -38,11 +38,14 @@ stages:
         nevents: 1
         hitsfile: '{workdir}/events.HITS.root'
       step: {$ref: 'steps.yml#/simulation'}
+      scatter:
+        parameters: [evntfile]
+        method: zip
 
   - name: reconstruction
     dependencies: [download_pu_low,download_pu_hi,simulation]
     scheduler:
-      scheduler_type: singlestep-stage
+      scheduler_type: multistep-stage
       parameters:
         baserelease: '20.7.0'
         trfrelease: {stages: init, output: "trfconfigs.reco.rel", unwrap: true}
@@ -53,3 +56,6 @@ stages:
         lowptfile: {stages: download_pu_low, output: downloaded_files, unwrap: true}
         aodfile: '{workdir}/events.AOD.root'
       step: {$ref: 'steps.yml#/reconstruction'}
+      scatter:
+        parameters: [highptfile,lowptfile,hitsfile]
+        method: zip
