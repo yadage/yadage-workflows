@@ -1,0 +1,15 @@
+stages:
+  - name: LHEtoEVNT
+    dependencies: ['init']
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        lhefile: {stages: init, output: lhefile, unwrap: true}
+        description: 'some description'
+        ecmEnergy: {stages: init, output: ecmEnergy, unwrap: true}
+        nevents: {stages: init, output: nevents, unwrap: true}
+        DSID: {stages: init, output: DSID, unwrap: true}
+        seed: {stages: init, output: generate_seed, unwrap: true}        
+        ouputEVNT: '{workdir}/my.EVNT.pool.root'
+      step: {$ref: 'fromlhe_steps.yml#/fromlhe'}
+       

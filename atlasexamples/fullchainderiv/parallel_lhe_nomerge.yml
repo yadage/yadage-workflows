@@ -1,0 +1,16 @@
+stages:
+  - name: parallel
+    dependencies: ['init']
+    scheduler:
+      scheduler_type: multistep-stage
+      workflow: {$ref: 'lhe_prod.yml'}
+      parameters:
+        lhefile: {stages: init, output: lhefiles, unwrap: true}
+        ecmEnergy: {stages: init, output: ecmEnergy, unwrap: true}
+        nevents: {stages: init, output: events_per_file, unwrap: true}
+        DSID: 1010
+        generate_seed: 1234
+        simulation_seed: 5678
+      scatter:
+        parameters: [lhefile]
+        method: zip

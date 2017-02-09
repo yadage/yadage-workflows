@@ -13,15 +13,6 @@ stages:
         DSID: {stages: init, output: DSID, unwrap: true}
         generate_seed: {stages: init, output: generate_seed, unwrap: true}
 
-  - name: evgen_truthana
-    dependencies: ['madgraph_gen']
-    scheduler:
-      scheduler_type: singlestep-stage
-      workflow: {$ref: 'ATLAS_analysis/truthEvgenAna/analysisflow.yml'}
-      parameters:
-        evgenfile: {stages: 'madgraph_gen.[*].generate', output: ouputEVNT, unwrap: true}
-
-
   - name: sim_reco
     dependencies: ['madgraph_gen']
     scheduler:
@@ -42,11 +33,10 @@ stages:
         daodfile: '{workdir}/my.DAOD.pool.root'
         ptag: p2656
 
-  - name: truth_derivation
-    dependencies: ['madgraph_gen']
+  - name: analysis_flow
+    dependencies: ['derivation']
     scheduler:
       scheduler_type: singlestep-stage
-      step: {$ref: 'reductionFramework/derivationsteps.yml#/evgen_daod_derivation'}
+      workflow: {$ref: 'postderivation/analysis_workflow.yml'}
       parameters:
-        evgenfile: {stages: 'madgraph_gen.[*].generate', output: ouputEVNT, unwrap: true}
-        truthderivation: '{workdir}/my.TRUTH_DAOD.pool.root'
+        daodfile: {stages: 'derivation', output: daodfile, unwrap: true}

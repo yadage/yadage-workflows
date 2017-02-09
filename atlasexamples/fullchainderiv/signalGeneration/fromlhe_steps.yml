@@ -1,0 +1,22 @@
+fromlhe:
+  process:
+    process_type: 'interpolated-script-cmd'
+    script: |
+      source resources/env.sh MCProd,19.2.5.3.3,here
+      ln -s {lhefile} lhefile.0000.events
+      cat << EOF > joboptions.py
+      include("MC15JobOptions/Pythia8_A2_MSTW2008LO_EvtGen_Common.py")
+      include("MC15JobOptions/Pythia8_MadGraph.py")
+      evgenConfig.description='{description}'
+      EOF
+      Generate_tf.py --ecmEnergy={ecmEnergy} --runNumber={DSID} --firstEvent=1 --asetup="" --maxEvents={nevents} --randomSeed={seed} --jobConfig=joboptions.py --outputEVNTFile={ouputEVNT} --inputGeneratorFile=lhefile
+  publisher:
+    publisher_type: frompar-pub
+    outputmap:
+      ouputEVNT: ouputEVNT
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: lukasheinrich/athena_trfsbase
+    resources:
+      - CVMFS
+      - GRIDProxy
