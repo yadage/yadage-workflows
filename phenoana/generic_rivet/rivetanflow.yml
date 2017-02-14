@@ -8,3 +8,11 @@ stages:
         hepmcfiles: {stages: init, output: hepmcfiles, unwrap: true}
         yodafile: '{workdir}/output.yoda'
         analysis: {stages: init, output: analysis, unwrap: true}
+  - name: plots
+    dependencies: ['rivet']
+    scheduler:
+      scheduler_type: 'singlestep-stage'
+      parameters:
+        yodaplots: '{workdir}/plots'
+        inputyoda: {stages: 'rivet', output: yodafile}
+      step: {$ref: 'steps.yml#/plot'}
