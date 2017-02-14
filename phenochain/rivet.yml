@@ -7,4 +7,5 @@ publisher:
     yodafile: outputyoda
 environment:
   environment_type: 'docker-encapsulated'
-  image: lukasheinrich/rivet-with-tex
+  image: hepstore/rivet
+  imagetag: '2.5.3'
