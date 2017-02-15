@@ -1,0 +1,17 @@
+stages:
+  - name: extracthistos
+    dependencies: [init]
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        daodfile: {stages: init, output: daodfile, unwrap: true}
+        histofile: '{workdir}/histos.root'
+      step: {$ref: steps.yml#/extract}
+  - name: plots
+    dependencies: [extracthistos]
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        histofile: {stages: extracthistos, output: histofile, unwrap: true}
+        plotfile: '{workdir}/plot.pdf'
+      step: {$ref: steps.yml#/plotdaod}
