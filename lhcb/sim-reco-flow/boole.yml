@@ -6,7 +6,6 @@ process:
     export USER=`whoami`
     source  /cvmfs/lhcb.cern.ch/lib/LbLogin.sh --no-userarea
     lb-run --use AppConfig.v3r266 --use ProdConf Boole v30r1 gaudirun.py prodConf_Boole.py
-    #echo "dummy	digi" >	{outputdir}/file.digi
 publisher:
   publisher_type: 'fromglob-pub'
   globexpression: '*.digi'
