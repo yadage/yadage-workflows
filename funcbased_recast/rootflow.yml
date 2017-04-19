@@ -1,0 +1,36 @@
+stages:
+  - name: recast
+    dependencies: [init]
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        output: '{workdir}/recast.json'
+        yv: {stages: init, output: yv, unwrap: true}
+        xv: {stages: init, output: xv, unwrap: true}
+      step:
+        process:
+          process_type: 'interpolated-script-cmd'
+          interpreter: python
+          script: |
+            import json
+            import math
+            def func_with_off(x,y, off):
+                return 1-math.tanh((x/700.*2*off)**2 + (y/200.*2*off)**2)
+
+            with open('{output}','w') as f:
+              json.dump({{
+               "lower_2sig_expected_CLs": func_with_off({xv},{yv}, off = 1.2),
+               "lower_1sig_expected_CLs": func_with_off({xv},{yv}, off = 1.1),
+               "expected_CLs": func_with_off({xv},{yv}, off = 1.0),
+               "upper_1sig_expected_CLs": func_with_off({xv},{yv}, off = 0.9),
+               "upper_2sig_expected_CLs": func_with_off({xv},{yv}, off = 0.8),
+               "observed_CLs": func_with_off({xv},{yv}, off = 0.95),
+              }},f)
+        publisher:
+          publisher_type: 'frompar-pub'
+          outputmap:
+            resultfile: output
+        environment:
+          environment_type: 'docker-encapsulated'
+          image: python
+          imagetag: '2.7'
