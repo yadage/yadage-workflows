@@ -12,7 +12,7 @@ process:
     echo 'adding this line to XSections_13TeV.txt'
     echo '{did} {xsec_pb} {k_factor} {filt_eff} {nametag} {mctype}_RECAST'
     echo '{did} {xsec_pb} {k_factor} {filt_eff} {nametag} {mctype}_RECAST' >> FrameworkSub/data/XSections_13TeV.txt
-    hsg5frameworkReadCxAOD_monoVH {outputdir} data/FrameworkExe_monoVH/framework_monoVH-read_HIGG5D1.cfg testrun filelist {outputdir}
+    hsg5frameworkReadCxAOD_monoVH {outputdir} data/FrameworkExe_monoVH/framework_monoVH-read_HIGG5D1.cfg testrun filelist /tmp/filelist
 publisher:
     publisher_type: interpolated-pub
     publish:
