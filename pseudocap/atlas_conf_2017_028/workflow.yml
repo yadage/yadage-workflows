@@ -10,7 +10,7 @@ stages:
         k_factor:  {stages: init, output: k_factor, unwrap: true}
         filt_eff:  {stages: init, output: filt_eff, unwrap: true}
         nametag: 'recast'
-        mctype: {stages: init, output: mctype, unwrap: true}'
+        mctype: {stages: init, output: mctype, unwrap: true}
         outputdir: '{workdir}/output'
       step: {$ref: 'selscript.yml#'}
   # - name: fit
