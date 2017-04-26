@@ -17,6 +17,6 @@ publisher:
   outputkey: histfitterfile
 environment:
   environment_type: 'docker-encapsulated'
-  image: lukasheinrich/multibsel_cvmfs
+  image: lukasheinrich/monohevsel
   resources:
     - GRIDProxy
