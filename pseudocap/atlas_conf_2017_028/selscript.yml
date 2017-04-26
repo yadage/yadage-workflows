@@ -19,4 +19,5 @@ environment:
   environment_type: 'docker-encapsulated'
   image: lukasheinrich/monohevsel
   resources:
+    - CVMFS
     - GRIDProxy
