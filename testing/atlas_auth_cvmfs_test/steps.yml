@@ -34,6 +34,7 @@ krbtest:
     process_type: 'interpolated-script-cmd'
     script: |
       /recast_auth/getkrb.sh
+      klist
   publisher:
     publisher_type: 'constant-pub'
     publish: {}
