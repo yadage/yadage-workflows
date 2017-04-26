@@ -1,0 +1,16 @@
+stages:
+  - name: cvmfstest
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters: {}
+      step: {$ref: 'steps.yml#/cvmfstest'}
+  - name: x509test
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters: {}
+      step: {$ref: 'steps.yml#/x509test'}
+  - name: krbtest
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters: {}
+      step: {$ref: 'steps.yml#/krbtest'}

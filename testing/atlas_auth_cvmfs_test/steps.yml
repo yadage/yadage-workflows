@@ -1,0 +1,46 @@
+cvmfstest:
+  process:
+    process_type: 'interpolated-script-cmd'
+    script: |
+      ls -lrt /cvmfs/atlas.cern.ch/repo/sw
+  publisher:
+    publisher_type: 'constant-pub'
+    publish: {}
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: lukasheinrich/recast_cvmfs_assisted
+    imagetag: '20170416'
+    resources:
+      - CVMFS
+
+x509test:
+  process:
+    process_type: 'interpolated-script-cmd'
+    script: |
+      /recast_auth/getmyproxy.sh
+  publisher:
+    publisher_type: 'constant-pub'
+    publish: {}
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: lukasheinrich/recast_cvmfs_assisted
+    imagetag: '20170416'
+    resources:
+      - CVMFS
+      - GRIDProxy
+
+krbtest:
+  process:
+    process_type: 'interpolated-script-cmd'
+    script: |
+      /recast_auth/getkrb.sh
+  publisher:
+    publisher_type: 'constant-pub'
+    publish: {}
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: lukasheinrich/recast_cvmfs_assisted
+    imagetag: '20170416'
+    resources:
+      - CVMFS
+      - GRIDProxy
