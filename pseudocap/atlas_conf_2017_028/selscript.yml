@@ -10,7 +10,7 @@ process:
     cat FrameworkSub/data/XSections_13TeV.txt|grep '^[0-9]'|grep zp2hdm -v > tmp.txt
     mv tmp.txt FrameworkSub/data/XSections_13TeV.txt
     echo {did} {xsec_pb} {k_factor} {filt_eff} {nametag} {mctype}_RECAST >> FrameworkSub/data/XSections_13TeV.txt
-    hsg5frameworkReadCxAOD_monoVH {outputdir} data/FrameworkExe_monoVH/framework_monoVH-read_HIGG5D1.cfg testrun filelist /tmp/filelist
+    hsg5frameworkReadCxAOD_monoVH {outputdir} data/FrameworkExe_monoVH/framework_monoVH-read_HIGG5D1.cfg testrun filelist {outputdir}
 publisher:
   publisher_type: 'fromglob-pub'
   globexpression: '*.root'
