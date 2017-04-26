@@ -1,6 +1,6 @@
 stages:
   - name: mcproduction
-    dependencies: []
+    dependencies: [init]
     scheduler:
       scheduler_type: singlestep-stage
       parameters:
