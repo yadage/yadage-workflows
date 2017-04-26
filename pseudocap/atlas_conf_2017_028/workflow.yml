@@ -1,0 +1,27 @@
+stages:
+  - name: selection
+    dependencies: ['init']
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        cxaodfile: {stages: init, output: cxaodfile, unwrap: true}
+        did:       {stages: init, output: did, unwrap: true}
+        xsec_pb:   {stages: init, output: xsec_pb, unwrap: true}
+        k_factor:  {stages: init, output: k_factor, unwrap: true}
+        filt_eff:  {stages: init, output: filt_eff, unwrap: true}
+        nametag: 'recast'
+        mctype: 'MadGraphPythia8'
+        outputdir: '{workdir}/output'
+      step: {$ref: 'selscript.yml#'}
+  # - name: fit
+  #   dependencies: ['selection']
+  #   scheduler:
+  #     scheduler_type: singlestep-stage
+  #     parameters:
+  #       bkgtree: 'root://eosuser.cern.ch///eos/project/r/recast/Bkg_2.4.15-2-0_merged.root'
+  #       datatree: 'root://eosuser.cern.ch///eos/project/r/recast/Data_2.4.15-2-0.root'
+  #       outputjson: '{workdir}/fitoutput.json'
+  #       selectionoutput: {stages: selection, output: histfitterfile, unwrap: true}
+  #       weightsfile: {stages: init, output: weightsfile, unwrap: true}
+  #       did: {stages: init, output: did, unwrap: true}
+  #     step: {$ref: 'fitscript.yml#'}
