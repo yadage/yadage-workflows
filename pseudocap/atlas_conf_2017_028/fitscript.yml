@@ -6,6 +6,7 @@ process:
     cd WSMaker
     source setup.sh MonoH
     /recast_auth/getkrb.sh
+    mkdir -p {fitinputdir}
     hadd {fitinputdir}/LimitHistograms.MonoH.vvbb.13TeV.root {signalfile} {zerolepbkg}
     xrdcp {onelepbkg}  {fitinputdir}/LimitHistograms.MonoH.lvbb.13TeV.root
     xrdcp {twolepbkg}  {fitinputdir}/LimitHistograms.MonoH.llbb.13TeV.root

@@ -20,9 +20,9 @@ stages:
       parameters:
         fitinputdir: '{workdir}/fitinputs'
         signalfile: {stages: selection, output: out, unwrap: true}
-        zerolepbkg: 'root://eosatlas.cern.ch///eos/project/r/recast/atlas/atlas_conf_2017_028/v22l/LimitHistograms.MonoH.vvbb.13TeV.MunichMPI.v22l_unblinded.qcdIncluded.bkgOnly.root'
-        onelepbkg: 'root://eosatlas.cern.ch///eos/project/r/recast/atlas/atlas_conf_2017_028/v22l/LimitHistograms.MonoH.lvbb.13TeV.MunichMPI.v22l.root'
-        twolepbkg: 'root://eosatlas.cern.ch///eos/project/r/recast/atlas/atlas_conf_2017_028/v22l/LimitHistograms.MonoH.llbb.13TeV.MunichMPI.v22l.root'
+        zerolepbkg: 'root://eosuser.cern.ch///eos/project/r/recast/atlas/atlas_conf_2017_028/v22l/LimitHistograms.MonoH.vvbb.13TeV.MunichMPI.v22l_unblinded.qcdIncluded.bkgOnly.root'
+        onelepbkg: 'root://eosuser.cern.ch///eos/project/r/recast/atlas/atlas_conf_2017_028/v22l/LimitHistograms.MonoH.lvbb.13TeV.MunichMPI.v22l.root'
+        twolepbkg: 'root://eosuser.cern.ch///eos/project/r/recast/atlas/atlas_conf_2017_028/v22l/LimitHistograms.MonoH.llbb.13TeV.MunichMPI.v22l.root'
         nametag: 'recast'
         limitfile: '{workdir}/limits.txt'
       step: {$ref: 'fitscript.yml#'}
