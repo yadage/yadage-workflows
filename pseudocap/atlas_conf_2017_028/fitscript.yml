@@ -1,0 +1,23 @@
+process:
+  process_type: 'interpolated-script-cmd'
+  interpreter: bash
+  script: |
+    source ~/.bashrc
+    cd WSMaker
+    source setup.sh MonoH
+    /recast_auth/getkrb.sh
+    hadd {fitinputdir}/LimitHistograms.MonoH.vvbb.13TeV.root {signalfile} {zerolepbkg}
+    xrdcp {onelepbkg}  {fitinputdir}/LimitHistograms.MonoH.lvbb.13TeV.root
+    xrdcp {twolepbkg}  {fitinputdir}/LimitHistograms.MonoH.llbb.13TeV.root
+    ./scripts/MonoH/RunMonoHbbStatsForRecast.sh {fitinputdir} {nametag} model
+    grep "\+2sigma" -A6 limits_{nametag}_model.log |grep -v Injected > {limitfile}
+publisher:
+    publisher_type: interpolated-pub
+    publish:
+      limitfile: '{limitfile}'
+environment:
+  environment_type: 'docker-encapsulated'
+  image: lukasheinrich/monohstat
+  resources:
+    - CVMFS
+    - GRIDProxy
