@@ -1,0 +1,1 @@
+[![Yadage Workflow](https://img.shields.io/badge/run_yadage-checkmate-4187AD.svg)](http://yadage.cern.ch/submit?toplevel=from-github%2Fphenochain%2Fcheckmate_workflow&workflow=workflow.yml&pars=%7B%22events%22%3A+50000%2C+%22analysis%22%3A+%22atlas_conf_2013_047%22%7D&outputs=format_results%2Flimits.json)
