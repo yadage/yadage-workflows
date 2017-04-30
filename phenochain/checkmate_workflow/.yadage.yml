@@ -4,3 +4,5 @@ outputs: format_results/limits.json
 pars:
   analysis: atlas_conf_2013_047
   events: 50000
+  neutralino_mass: 100
+  stop_mass: 750
