@@ -7,7 +7,7 @@ process:
     /recast_auth/getkrb.sh
 
     echo {cxaodfile} > /tmp/filelist
-    cat FrameworkSub/data/XSections_13TeV.txt|grep '^{did}'> tmp.txt
+    cat FrameworkSub/data/XSections_13TeV.txt|grep -v '^{did}'> tmp.txt
     mv tmp.txt FrameworkSub/data/XSections_13TeV.txt
     echo 'adding this line to XSections_13TeV.txt'
     echo '{did} {xsec_pb} {k_factor} {filt_eff} {nametag} {mctype}_RECAST'
