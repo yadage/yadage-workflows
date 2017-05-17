@@ -7,4 +7,4 @@
 
 Example Yadage Badge
 
-[![Launch Workflow](https://img.shields.io/badge/run_yadage-madgraph_delphes-7a438c.svg)](http://yadage.cern.ch/submit?toplevel=from-github%2Fphenochain&workflow=madgraph_delphes.yml&outputs=delphes%2Foutput.lhco%2Cdelphes%2Foutput.root)
+[![Launch Workflow](https://img.shields.io/badge/run_yadage-madgraph_delphes-4187AD.svg)](https://yadage.cern.ch/submit?toplevel=from-github%2Fphenochain&workflow=madgraph_delphes.yml&outputs=delphes%2Foutput.lhco%2Cdelphes%2Foutput.root)
