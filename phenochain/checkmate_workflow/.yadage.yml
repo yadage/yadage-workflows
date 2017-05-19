@@ -2,7 +2,7 @@ toplevel: from-github/phenochain/checkmate_workflow
 workflow: workflow.yml
 outputs: format_results/limits.json
 pars:
-  analysis: atlas_conf_2013_047
+  analysis: atlas_conf_2013_024
   events: 50000
   neutralino_mass: 100
   stop_mass: 750
