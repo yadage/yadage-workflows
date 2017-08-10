@@ -1,10 +1,11 @@
 process:
   process_type: 'string-interpolated-cmd'
-  cmd: 'echo {nevents} LHE events > {outputlhe}'
+  cmd: 'echo {nevents} LHE events > {outputlhe}; echo 1.0pb > {xsecfile}'
 publisher:
   publisher_type: 'frompar-pub'
   outputmap:
     lhefile: outputlhe
+    xsecfile: xsecfile
 environment:
   environment_type: 'docker-encapsulated'
   image: busybox

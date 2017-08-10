@@ -15,6 +15,7 @@ stages:
       scheduler_type: 'singlestep-stage'
       parameters:
         outputlhe: '{workdir}/output.lhe'
+        xsecfile: '{workdir}/xsection.dat'
         nevents: {stages: init, output: nevents, unwrap: true}
         paramcard: {stages: prepare, output: parcard, unwrap: true}
         runcard: {stages: prepare, output: runcard, unwrap: true}

@@ -1,8 +1,13 @@
 stages:
   - name: 'subStage'
-    dependencies: []
+    dependencies: [init]
     scheduler:
       scheduler_type: singlestep-stage
       parameters:
         subpar: {stages: init, output: subpar, unwrap: true}
       step: {$ref: 'substeps.yml#/subStep'}
+
+
+
+
+#
