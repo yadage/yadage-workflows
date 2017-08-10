@@ -1,0 +1,6 @@
+nevents: 1000
+parameters:
+  m1: 100
+  m2: 50
+run_conditions:
+  energy: 8000

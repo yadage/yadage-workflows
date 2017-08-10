@@ -1,0 +1,10 @@
+process:
+  process_type: 'string-interpolated-cmd'
+  cmd: 'echo {nevents} HEPMC events > {outputhepmc}'
+publisher:
+  publisher_type: 'frompar-pub'
+  outputmap:
+    hepmcfile: outputhepmc
+environment:
+  environment_type: 'docker-encapsulated'
+  image: busybox

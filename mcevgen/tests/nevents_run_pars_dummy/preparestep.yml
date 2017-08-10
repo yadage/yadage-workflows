@@ -1,0 +1,11 @@
+process:
+  process_type: 'string-interpolated-cmd'
+  cmd: 'echo {parameters} > {parametercard} && echo {energy} > {runcard}'
+publisher:
+  publisher_type: 'frompar-pub'
+  outputmap:
+    parcard: parametercard
+    runcard: runcard
+environment:
+  environment_type: 'docker-encapsulated'
+  image: busybox

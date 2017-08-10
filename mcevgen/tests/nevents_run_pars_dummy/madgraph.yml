@@ -1,0 +1,10 @@
+process:
+  process_type: 'string-interpolated-cmd'
+  cmd: 'echo {nevents} LHE events > {outputlhe}'
+publisher:
+  publisher_type: 'frompar-pub'
+  outputmap:
+    lhefile: outputlhe
+environment:
+  environment_type: 'docker-encapsulated'
+  image: busybox
