@@ -1,0 +1,10 @@
+process:
+  process_type: 'string-interpolated-cmd'
+  cmd: 'touch {historootfile}'
+publisher:
+  publisher_type: 'frompar-pub'
+  outputmap:
+    historootfile: historootfile
+environment:
+  environment_type: 'docker-encapsulated'
+  image: busybox

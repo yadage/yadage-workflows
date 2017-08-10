@@ -1,0 +1,10 @@
+process:
+  process_type: 'string-interpolated-cmd'
+  cmd: './runanalysis.sh {limit_results}'
+publisher:
+  publisher_type: 'frompar-pub'
+  outputmap:
+    limit_results: limit_results
+environment:
+  environment_type: 'docker-encapsulated'
+  image: lukasheinrich/trivialrecast

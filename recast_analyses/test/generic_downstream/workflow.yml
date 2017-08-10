@@ -1,0 +1,17 @@
+stages:
+  - name: event_selection
+    dependencies: [init]
+    scheduler:
+      scheduler_type: 'singlestep-stage'
+      parameters:
+        inputhepmc: {stages: init, output: hepmcfile}
+        historootfile: '{workdir}/histograms.root'
+      step: {$ref: 'evsel.yml'}
+  - name: stat_analysis
+    dependencies: [event_selection]
+    scheduler:
+      scheduler_type: 'singlestep-stage'
+      parameters:
+        histos: {stages: 'event_selection', output: historootfile}
+        limit_results: '{workdir}/limits.json'
+      step: {$ref: 'fit.yml'}
