@@ -1,0 +1,5 @@
+nsamples: 100
+runcard: Run-1.dat
+ranges: params.ranges
+ipolorder: 4
+eventsppoint: 100

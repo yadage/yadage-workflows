@@ -1,0 +1,36 @@
+(run){{
+  # tags
+  LJET:==; NJET:=1; YCUT:=2.0;
+  LMJET:=2; NMJET:=3; YMCUT:=2.0;
+  NMMJET:=1; YMMCUT:=2.0;  
+
+  # general settings
+  EVENTS 1000;
+  ANALYSIS Rivet;
+
+  ALPHAS(MZ)={ALPHAS}
+  # scales
+  SCALES METS{{MU_F2}}{{MU_R2}}{{MU_Q2}};
+
+
+  # ME generation
+  ME_SIGNAL_GENERATOR Comix Amegic LOOPGEN;
+  EVENT_GENERATION_MODE Weighted;
+
+  # collider setup
+  BEAM_1  11; BEAM_ENERGY_1 45.6;
+  BEAM_2 -11; BEAM_ENERGY_2 45.6;
+}}(run)
+
+(processes){{
+  Process 11 -11 -> 93 93 93{{NJET}};
+  Order (*,2);
+  CKKW pow(10,-YCUT);
+  End process;
+}}(processes)
+
+(analysis){{
+  BEGIN_RIVET {{
+   -a ALEPH_2004_S5765862
+  }} END_RIVET;
+}}(analysis)

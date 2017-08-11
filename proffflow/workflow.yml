@@ -1,0 +1,34 @@
+stages:
+
+  - name: profsample
+    dependencies: ['init']
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        nsamples: {stages: init, output: nsamples, unwrap: true}
+        outputdir: '{workdir}/samples'
+        runcardtempl: {stages: init, output: runcard, unwrap: true}
+        rangefile: {stages: init, output: ranges, unwrap: true}
+      step: {$ref: 'steps.yml#/profsample'}
+
+  - name: sherpa
+    dependencies: ['profsample']
+    scheduler:
+      scheduler_type: multistep-stage
+      parameters:
+        sampledir: {stages: profsample, output: sampledirs, unwrap: true}
+        nevents: {stages: init, output: eventsppoint, unwrap: true}
+      step: {$ref: 'steps.yml#/sherpa'}
+      scatter:
+        parameters: [sampledir]
+        method: zip
+
+  - name: profipol
+    dependencies: ['sherpa']
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        toplevel: {stages: profsample, output: toplevel, unwrap: true}
+        ipolfile: '{workdir}/ipol.dat'
+        ipolorder: {stages: init, output: ipolorder, unwrap: true}
+      step: {$ref: 'steps.yml#/profipol'}

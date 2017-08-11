@@ -1,0 +1,46 @@
+common_env: &commonenv
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: busybox
+
+profsample:
+  process:
+    process_type: interpolated-script-cmd
+    script: |
+      echo hello world
+      mkdir -p {outputdir}/0001
+      touch {outputdir}/0001/input.dat
+      mkdir -p {outputdir}/0002
+      touch {outputdir}/0002/output.dat
+  publisher:
+    publisher_type: interpolated-pub
+    glob: True
+    publish:
+      sampledirs: '{outputdir}/*'
+      toplevel: '{outputdir}'
+  <<: *commonenv
+
+sherpa:
+  process:
+    process_type: interpolated-script-cmd
+    script: |
+      cd {sampledir}
+      echo Sherpa -f template.dat -e {nevents}
+      touch Analysis.yoda
+  publisher:
+    publisher_type: interpolated-pub
+    publish:
+      yodafile: '{sampledir}/Analysis.yoda'
+  <<: *commonenv
+
+profipol:
+  process:
+    process_type: interpolated-script-cmd
+    script: |
+      echo prof2-ipol {toplevel} {ipolfile} --order {ipolorder}
+      touch {ipolfile}
+  publisher:
+    publisher_type: interpolated-pub
+    publish:
+      profdf: '{ipolfile}'
+  <<: *commonenv
