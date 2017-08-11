@@ -9,9 +9,9 @@ profsample:
     script: |
       echo hello world
       mkdir -p {outputdir}/0001
-      touch {outputdir}/0001/input.dat
+      echo 0001_input > {outputdir}/0001/input.dat
       mkdir -p {outputdir}/0002
-      touch {outputdir}/0002/output.dat
+      echo 0002_input > {outputdir}/0002/input.dat
   publisher:
     publisher_type: interpolated-pub
     glob: True
@@ -25,8 +25,9 @@ sherpa:
     process_type: interpolated-script-cmd
     script: |
       cd {sampledir}
+      cat input.dat
       echo Sherpa -f template.dat -e {nevents}
-      touch Analysis.yoda
+      cat input.dat > Analysis.yoda
   publisher:
     publisher_type: interpolated-pub
     publish:
@@ -38,7 +39,7 @@ profipol:
     process_type: interpolated-script-cmd
     script: |
       echo prof2-ipol {toplevel} {ipolfile} --order {ipolorder}
-      touch {ipolfile}
+      find {toplevel} > {ipolfile}
   publisher:
     publisher_type: interpolated-pub
     publish:
