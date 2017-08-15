@@ -1,0 +1,23 @@
+checkmate:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: 'utilcli.py  prepare_checkmate -n recast -s {seed} -o {outputdir} /templates/checkmate_template.dat {xsecfile} {hepmcfile} {analysis} {runcardfile} && /home/checkmate/tools/checkmate/bin/CheckMATE {runcardfile}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      outputdir: outputdir
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: lukasheinrich/checkmate_w_util
+
+format_results:
+  process:
+    process_type: 'string-interpolated-cmd'
+    cmd: 'utilcli.py recast_format {outputdir}/recast/evaluation/{analysis}_cl_limits.txt {limitresultfile}'
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      limitresultfile: limitresultfile
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: lukasheinrich/checkmate_w_util

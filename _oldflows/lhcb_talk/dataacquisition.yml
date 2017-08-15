@@ -1,9 +1,0 @@
-process:
-  process_type: 'string-interpolated-cmd'
-  cmd: 'echo a b c|sed "s| |,|g"|xargs -I$ echo acq_out: "[$]" > /workdir/outputfile.yml'
-publisher:
-  publisher_type: 'fromyaml-pub'
-  yamlfile: '/workdir/outputfile.yml'
-environment:
-  environment_type: 'docker-encapsulated'
-  image: busybox

@@ -5,6 +5,7 @@ stages:
       scheduler_type: 'singlestep-stage'
       parameters:
         inputhepmc: {stages: init, output: hepmcfile}
+        xsecfile: {stages: init, output: xsecfile}
         historootfile: '{workdir}/histograms.root'
       step: {$ref: 'evsel.yml'}
   - name: stat_analysis

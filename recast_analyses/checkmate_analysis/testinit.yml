@@ -1,0 +1,3 @@
+hepmcfile: file.hepmc
+xsecfile: xsec.txt
+analysis: atlas_conf_xxx

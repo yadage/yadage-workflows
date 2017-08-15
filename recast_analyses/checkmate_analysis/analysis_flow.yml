@@ -1,0 +1,22 @@
+stages:
+  - name: checkmate
+    dependencies: ['init']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'steps.yml#/checkmate'}
+      parameters:
+        seed: 9876
+        outputdir: '{workdir}/checkmaterun'
+        xsecfile: {stages: init, output: xsecfile, unwrap: true}
+        hepmcfile: {stages: init, output: hepmcfile, unwrap: true}
+        analysis: {stages: init, output: analysis, unwrap: true}
+        runcardfile: '{workdir}/checkmate.dat'
+  - name: format_results
+    dependencies: ['checkmate']
+    scheduler:
+      scheduler_type: singlestep-stage
+      step: {$ref: 'steps.yml#/format_results'}
+      parameters:
+        outputdir: {stages: checkmate, output: outputdir, unwrap: true}
+        analysis: {stages: init, output: analysis, unwrap: true}
+        limitresultfile: '{workdir}/limits.json'

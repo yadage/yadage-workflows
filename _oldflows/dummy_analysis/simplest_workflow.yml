@@ -1,9 +1,0 @@
-context:
-  myparameter: ~
-stages:
-  - name: dummystage
-    parameters:
-      parameter_one: '{myparameter}'
-    scheduler:
-      scheduler_type: 'single-from-ctx'
-      step: {$ref: 'dummy_analysis/simplestep.yml'} 
