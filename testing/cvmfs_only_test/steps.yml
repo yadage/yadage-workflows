@@ -1,0 +1,15 @@
+cvmfstest:
+  process:
+    process_type: 'interpolated-script-cmd'
+    script: |
+      ls -lrt /cvmfs/atlas.cern.ch/repo/sw > {outputfile}
+  publisher:
+    publisher_type: 'frompar-pub'
+    outputmap:
+      outputfile: outputfile
+  environment:
+    environment_type: 'docker-encapsulated'
+    image: lukasheinrich/recast_cvmfs_assisted
+    imagetag: '20170416'
+    resources:
+      - CVMFS

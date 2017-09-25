@@ -1,0 +1,7 @@
+stages:
+  - name: cvmfstest
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        outputfile: '{workdir}/cvmfsls.txt'
+      step: {$ref: 'steps.yml#/cvmfstest'}
