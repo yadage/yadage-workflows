@@ -9,6 +9,7 @@ simulation:
   environment:
     environment_type: 'docker-encapsulated'
     image: lukasheinrich/athena_trfsbase
+    workdir: '{workdir}'
     resources:
       - CVMFS
       - GRIDProxy
