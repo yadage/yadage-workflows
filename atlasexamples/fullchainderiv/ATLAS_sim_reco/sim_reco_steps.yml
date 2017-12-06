@@ -1,7 +1,7 @@
 simulation:
   process:
     process_type: 'string-interpolated-cmd'
-    cmd: 'source resources/env_with_voms.sh AtlasProduction,20.7.5.1,here && Sim_tf.py --AMIConfig {AMItag} --inputEvgenFile {evgenfile} --outputHitsFile {hitsfile} --maxEvents {maxevts} --skipEvents 0 --randomSeed {simseed}'
+    cmd: 'source /code/resources/env_with_voms.sh AtlasProduction,20.7.5.1,here && Sim_tf.py --AMIConfig {AMItag} --inputEvgenFile {evgenfile} --outputHitsFile {hitsfile} --maxEvents {maxevts} --skipEvents 0 --randomSeed {simseed}'
   publisher:
     publisher_type: 'frompar-pub'
     outputmap:
@@ -9,6 +9,7 @@ simulation:
   environment:
     environment_type: 'docker-encapsulated'
     image: lukasheinrich/athena_trfsbase
+    workdir: '{workdir}'
     resources:
       - CVMFS
       - GRIDProxy
