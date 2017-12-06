@@ -14,6 +14,34 @@ stages:
             lsetup rucio
             rucio download {dataset}
         publisher:
+          publisher_type: 'interpolated-pub'
+          relative_paths: True
+          glob: True
+          publish:
+            datasetfiles: '{dataset}/*.root*'
+        environment:
+          environment_type: 'docker-encapsulated'
+          image: lukasheinrich/recast_cvmfs_assisted
+          imagetag: '20170416'
+          workdir: '{workdir}'
+          resources:
+            - CVMFS
+            - GRIDProxy
+  - name: read
+    dependencies: [grid_acquisition_test]
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        datasetfiles: {stages: grid_acquisition_test, output: datasetfiles, unwrap: true}
+      step:
+        process:
+          process_type: 'interpolated-script-cmd'
+          script: |
+            source ~/.bashrc
+            /recast_auth/getmyproxy.sh
+            lsetup root
+            echo .ls | root -b {datasetfiles}
+        publisher:
           publisher_type: 'constant-pub'
           publish: {}
         environment:
