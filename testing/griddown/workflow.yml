@@ -1,0 +1,25 @@
+stages:
+  - name: grid_acquisition_test
+    dependencies: [init]
+    scheduler:
+      scheduler_type: singlestep-stage
+      parameters:
+        dataset: {stages: init, output: dataset, unwrap: true}
+      step:
+        process:
+          process_type: 'interpolated-script-cmd'
+          script: |
+            source ~/.bashrc
+            /recast_auth/getmyproxy.sh
+            lsetup rucio
+            rucio download {dataset}
+        publisher:
+          publisher_type: 'constant-pub'
+          publish: {}
+        environment:
+          environment_type: 'docker-encapsulated'
+          image: lukasheinrich/recast_cvmfs_assisted
+          imagetag: '20170416'
+          resources:
+            - CVMFS
+            - GRIDProxy
