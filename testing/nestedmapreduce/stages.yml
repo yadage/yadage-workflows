@@ -1,6 +1,6 @@
 stages:
   - name: map
-    dependencies: []
+    dependencies: [init]
     scheduler:
       scheduler_type: multistep-stage
       parameters:
