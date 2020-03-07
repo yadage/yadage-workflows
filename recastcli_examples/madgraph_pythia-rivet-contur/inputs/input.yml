@@ -1,0 +1,4 @@
+proc_card: 'proc_card_dm.dat'
+n_events: 1000
+analysis: ATLAS_2016_I1458270
+yoda: 'rivet_analysis.yoda'

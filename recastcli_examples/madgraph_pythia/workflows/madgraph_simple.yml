@@ -1,0 +1,22 @@
+stages:
+  - dependencies:
+    - init
+    name: madgraph
+    scheduler:
+      parameters:
+        proc_card: {output: proc_card, step: init}
+        n_events: {output: n_events, step: init}
+        outputlhe: "{workdir}/events.lhe"
+      scheduler_type: singlestep-stage
+      step:
+        environment:
+          environment_type: docker-encapsulated
+          image: recast/madgraph
+          imagetag: '2.6.7_v2'
+        process:
+          process_type: string-interpolated-cmd
+          cmd: python steer_madgraph.py {proc_card} {outputlhe} -n {n_events}
+        publisher:
+          outputmap:
+            lhefile: outputlhe
+          publisher_type: frompar-pub

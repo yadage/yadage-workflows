@@ -1,0 +1,27 @@
+stages:
+  - dependencies:
+    - init
+    name: contur
+    scheduler:
+      parameters:
+        inputyoda: {output: yoda, step: init}
+        output_analysis: "{workdir}/ANALYSIS"
+        output_plots: "{workdir}/plots"
+      scheduler_type: singlestep-stage
+      step:
+        environment:
+          environment_type: 'docker-encapsulated'
+          image: huangjoanna/contur
+          imagetag: 'latest'
+        process:
+          process_type: interpolated-script-cmd
+          script: |
+            source ./setupContur.sh
+            contur {inputyoda}
+            cp -r ./ANALYSIS {output_analysis}
+            cp -r ./plots {output_plots}
+        publisher:
+          publish:
+            analysis: output_analysis
+            plots: output_plots
+          publisher_type: 'interpolated-pub'

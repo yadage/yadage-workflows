@@ -1,0 +1,84 @@
+stages:
+  - dependencies: ["init"]
+    name: generation_madgraph_pythia
+    scheduler:
+      parameters:
+        n_events:
+          output: n_events
+          step: init
+        proc_card:
+          output: proc_card
+          step: init
+      scheduler_type: singlestep-stage
+      workflow:
+        stages:
+        - dependencies:
+          - init
+          name: madgraph
+          scheduler:
+            parameters:
+              n_events:
+                output: n_events
+                step: init
+              outputlhe: events.lhe
+              param_card:
+                output: param_card
+                step: init
+              proc_card:
+                output: proc_card
+                step: init
+              run_card:
+                output: run_card
+                step: init
+              ufotar:
+                output: ufotar
+                step: init
+            scheduler_type: singlestep-stage
+            step:
+              environment:
+                environment_type: docker-encapsulated
+                image: recast/madgraph
+                imagetag: '2.6.7'
+              process:
+                process_type: interpolated-script-cmd
+                script: '. ~/.profile
+
+                  python steer_madgraph.py {proc_card} {outputlhe} --ufotar {ufotar}
+                  --run_card {run_card} \
+
+                  --param_card {param_card} -n {n_events}
+
+                  '
+              publisher:
+                outputmap:
+                  lhefile: outputlhe
+                publisher_type: frompar-pub
+        - dependencies: ["madgraph"]
+          name: pythia
+          scheduler:
+            parameters:
+              inputlhe: events.lhe
+              n_events:
+                output: n_events
+                step: init
+              outputhepmc: '{workdir}/output.hepmc'
+              pythia_card:
+                output: pythia_card
+                step: init
+            scheduler_type: singlestep-stage
+            step:
+              environment:
+                environment_type: docker-encapsulated
+                image: recast/pythia
+                imagetag: '8243'
+              process:
+                process_type: interpolated-script-cmd
+                script: '. ~/.profile
+
+                  python steer_pythia.py {inputlhe} {hepmc} {n_events} {pythia_card}
+
+                  '
+              publisher:
+                outputmap:
+                  hepmc: outputhepmc
+                publisher_type: frompar-pub

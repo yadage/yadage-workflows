@@ -1,0 +1,2 @@
+import model DMsimp_s_spin1 --modelname
+generate p p > xd xd~ j
